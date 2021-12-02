@@ -18,6 +18,7 @@ import com.wong.elapp.R;
 import com.wong.elapp.databinding.FragmentDashboardBinding;
 import com.wong.elapp.network.mapper.LocalService;
 import com.wong.elapp.pojo.RandomList;
+import com.wong.elapp.ui.home.HomeViewModel;
 import com.wong.elapp.utils.ERRCODE;
 
 import java.util.List;
@@ -35,18 +36,18 @@ public class DashboardFragment extends Fragment {
     @Inject
     LocalService localService;
 
-    private DashboardViewModel dashboardViewModel;
+    private HomeViewModel homeViewModel;
     private FragmentDashboardBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater,
                              ViewGroup container, Bundle savedInstanceState) {
-        dashboardViewModel = new ViewModelProvider(this).get(DashboardViewModel.class);
+        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         binding = FragmentDashboardBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
         final TextView textView = binding.textView;
         final Button btn = binding.button;
-        dashboardViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
+        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
             @Override
             public void onChanged(@Nullable String s) {
                 textView.setText(s);

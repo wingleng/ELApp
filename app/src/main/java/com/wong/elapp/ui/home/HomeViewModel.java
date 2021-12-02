@@ -14,8 +14,11 @@ public class HomeViewModel extends ViewModel {
     public HomeViewModel() {
         word_ui = new MutableLiveData<>();
         itera_randlist = new MutableLiveData<>();
+        text = new MutableLiveData<>();
+        text.setValue("测试数据");
     }
-
+    //测试数据
+    private MutableLiveData<String> text;
 
     //设置随机单词，但是感觉没有必要使用livedata进行监视，因为这个数据应该只在请求的时候设置一次。不过为了所谓的生命周期风险，还是写一下吧。
     private MutableLiveData<List<RandomList>> list_word;
@@ -53,5 +56,10 @@ public class HomeViewModel extends ViewModel {
 
     public MutableLiveData<Iterator<RandomList>> getItera_randlist() {
         return itera_randlist;
+    }
+
+    //测试数据
+    public MutableLiveData<String> getText(){
+        return this.text;
     }
 }

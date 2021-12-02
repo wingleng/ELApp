@@ -40,7 +40,7 @@ public class HomeFragment extends Fragment {
     private FragmentHomeBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = new ViewModelProvider(this).get(HomeViewModel.class);//这里有点担心的问题就是，这个viewmodel是绑定到Fragment的，所以生命周期会不会收到影响
+        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);//这里有点担心的问题就是，这个viewmodel是绑定到Fragment的，所以生命周期会不会收到影响
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
 
