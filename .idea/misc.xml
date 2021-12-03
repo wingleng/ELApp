@@ -7,8 +7,11 @@
         <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/drawable/ic_dashboard_black_24dp.xml" value="0.26927083333333335" />
         <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/drawable/ic_home_black_24dp.xml" value="0.26927083333333335" />
         <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/layout/activity_main.xml" value="0.161231884057971" />
+        <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/layout/fragment_contain.xml" value="0.26621847886098404" />
+        <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/layout/fragment_containter.xml" value="0.13177083333333334" />
         <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/layout/fragment_dashboard.xml" value="0.22735507246376813" />
         <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/layout/fragment_home.xml" value="0.26621847886098404" />
+        <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/layout/fragment_recite.xml" value="0.15260416666666668" />
         <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/menu/bottom_nav_menu.xml" value="0.253125" />
         <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/xml/network_security_config.xml" value="0.1" />
       </map>

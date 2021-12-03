@@ -3,4 +3,6 @@
     <string name="title_recite">背单词</string>
     <string name="title_translate">翻译</string>
     <string name="title_chart">记录</string>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment">Hello blank fragment</string>
 </resources>

@@ -1,6 +1,9 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <attr name="app_skin_progress_bar_bg_color" format="color|reference"/>
+    <attr name="app_skin_progress_bar_progress_color" format="color|reference"/>
+    <attr name="app_skin_progress_bar_text_color" format="color|reference"/>
     <!-- Base application theme. -->
-    <style name="Theme.ELAPP" parent="Theme.MaterialComponents.DayNight.DarkActionBar">
+    <style name="Theme.ELAPP" parent="QMUI.Compat">
         <!-- Primary brand color. -->
         <item name="colorPrimary">@color/purple_500</item>
         <item name="colorPrimaryVariant">@color/purple_700</item>
@@ -13,4 +16,7 @@
         <item name="android:statusBarColor" tools:targetApi="l">?attr/colorPrimaryVariant</item>
         <!-- Customize your theme here. -->
     </style>
+
+
+
 </resources>

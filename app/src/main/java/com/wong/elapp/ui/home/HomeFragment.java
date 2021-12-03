@@ -1,8 +1,10 @@
 package com.wong.elapp.ui.home;
 
+import android.animation.ValueAnimator;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.Button;
@@ -13,7 +15,11 @@ import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.Navigation;
 
+import com.qmuiteam.qmui.layout.QMUIButton;
+import com.qmuiteam.qmui.widget.QMUIProgressBar;
+import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.wong.elapp.R;
 import com.wong.elapp.databinding.FragmentHomeBinding;
 import com.wong.elapp.network.mapper.LocalService;
@@ -36,35 +42,37 @@ public class HomeFragment extends Fragment {
     @Inject
     LocalService localService;
 
+    private QMUIRoundButton qm_send_btn;
+
+    private QMUIProgressBar circleProgressBar;
+
     private HomeViewModel homeViewModel;
+
     private FragmentHomeBinding binding;
 
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);//这里有点担心的问题就是，这个viewmodel是绑定到Fragment的，所以生命周期会不会收到影响
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        // TODO:获取各组件
 
+//        final TextView textView = binding.textView2;
+        qm_send_btn = binding.qmSend;
+        circleProgressBar = binding.circleProgressBar;
 
-        final TextView textView = binding.textView2;
-        final Button btn_next = binding.next;
-        final Button btn_send = binding.send;
-
-        /*
-        首先点击send按钮，发送请求
-        请求成功之后，将其放置到viewmodel中
-        然后使用next按钮，测试将返回的List进行遍历
-         */
+        // TODO:各组件的初始化
 
         //设置文本自动更新。。
         homeViewModel.getWord_ui().observe(getViewLifecycleOwner(), randomList -> {
-            textView.setText(homeViewModel.getWord_ui().getValue().getNames());
+//            textView.setText(homeViewModel.getWord_ui().getValue().getNames());
         });
 
-        //发送请求
-        btn_send.setOnClickListener(new Btn_sendListenter());
+        //设置进度条
+        circleProgressBar.setMaxValue(100);
+        circleProgressBar.setProgress(30,true);
 
-        //点击next按钮，会将wordlist进行迭代，并且同时更新界面UI
-        btn_next.setOnClickListener(new Btn_NextListener());
+        //发送请求
+        qm_send_btn.setOnClickListener(new Btn_sendListenter());
 
         return root;
     }
@@ -82,6 +90,7 @@ public class HomeFragment extends Fragment {
     class Btn_sendListenter implements View.OnClickListener{
         @Override
         public void onClick(View v) {
+            //启动按钮动画
             Call<List<RandomList>> call = localService.getRandomWords();
             call.enqueue(new Callback<List<RandomList>>() {
                 @Override
@@ -89,6 +98,9 @@ public class HomeFragment extends Fragment {
                     Log.i(ERRCODE.REQUEST_SUCCESS.getMsgtype(), ERRCODE.REQUEST_SUCCESS.getMsg());
                     Log.i("返回的数据：",response.body().toString());
                     homeViewModel.setList_word(response.body());
+
+                    //跳转到其他界面
+                    Navigation.findNavController(v).navigate(R.id.action_navigation_home_to_reciteFragment2);
                 }
 
                 @Override
