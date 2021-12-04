@@ -35,7 +35,7 @@
         app:qmui_skin_progress_color="?attr/app_skin_progress_bar_progress_color"
         app:qmui_skin_text_color="?attr/app_skin_progress_bar_text_color"
         app:qmui_stroke_width="18dp"
-        app:qmui_type="type_rect" />
+        app:qmui_type="type_circle" />
 
     <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
         android:id="@+id/qm_send"

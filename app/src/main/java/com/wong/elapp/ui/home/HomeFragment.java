@@ -54,22 +54,23 @@ public class HomeFragment extends Fragment {
         homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);//这里有点担心的问题就是，这个viewmodel是绑定到Fragment的，所以生命周期会不会收到影响
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
-        // TODO:获取各组件
 
-//        final TextView textView = binding.textView2;
+        //获取组件引用
         qm_send_btn = binding.qmSend;
         circleProgressBar = binding.circleProgressBar;
 
-        // TODO:各组件的初始化
 
-        //设置文本自动更新。。
-        homeViewModel.getWord_ui().observe(getViewLifecycleOwner(), randomList -> {
-//            textView.setText(homeViewModel.getWord_ui().getValue().getNames());
-        });
-
+        //TODO:进度条组件仍未完成
         //设置进度条
         circleProgressBar.setMaxValue(100);
         circleProgressBar.setProgress(30,true);
+        circleProgressBar.setQMUIProgressBarTextGenerator(new QMUIProgressBar.QMUIProgressBarTextGenerator() {
+            @Override
+            public String generateText(QMUIProgressBar progressBar, int value, int maxValue) {
+                return 100 * value / maxValue + "%";
+            }
+        });
+
 
         //发送请求
         qm_send_btn.setOnClickListener(new Btn_sendListenter());
