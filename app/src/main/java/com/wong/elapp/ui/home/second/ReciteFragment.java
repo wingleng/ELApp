@@ -79,7 +79,7 @@ public class ReciteFragment extends Fragment {
         viewPager2.setOffscreenPageLimit(3);
 
         //配置页面滑动以及监听器
-        viewPager2.setUserInputEnabled(false);//禁止用户进行滑动
+//        viewPager2.setUserInputEnabled(false);//禁止用户进行滑动
 
         //设置按钮监听器,点击就模拟滑动
         btnLeft.setOnClickListener(v -> {
