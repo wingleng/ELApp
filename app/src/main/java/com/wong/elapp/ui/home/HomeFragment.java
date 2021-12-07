@@ -17,6 +17,8 @@ import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
 import androidx.navigation.Navigation;
 
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
 import com.qmuiteam.qmui.layout.QMUIButton;
 import com.qmuiteam.qmui.widget.QMUIProgressBar;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
@@ -24,8 +26,10 @@ import com.wong.elapp.R;
 import com.wong.elapp.databinding.FragmentHomeBinding;
 import com.wong.elapp.network.mapper.LocalService;
 import com.wong.elapp.pojo.RandomList;
+import com.wong.elapp.pojo.vo.Result;
 import com.wong.elapp.utils.ERRCODE;
 
+import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -92,20 +96,22 @@ public class HomeFragment extends Fragment {
         @Override
         public void onClick(View v) {
             //启动按钮动画
-            Call<List<RandomList>> call = localService.getRandomWords();
-            call.enqueue(new Callback<List<RandomList>>() {
+            Call<Result<List<RandomList>>> call = localService.getRandomWords();
+            call.enqueue(new Callback<Result<List<RandomList>>>() {
                 @Override
-                public void onResponse(Call<List<RandomList>> call, Response<List<RandomList>> response) {
+                public void onResponse(Call<Result<List<RandomList>>> call, Response<Result<List<RandomList>>> response) {
                     Log.i(ERRCODE.REQUEST_SUCCESS.getMsgtype(), ERRCODE.REQUEST_SUCCESS.getMsg());
                     Log.i("返回的数据：",response.body().toString());
-                    homeViewModel.setList_word(response.body());
+                    Log.i("数据类型：",response.body().getData().getClass()+"");
+                    List<RandomList> list = (List<RandomList>) response.body().getData();
+                    homeViewModel.setList_word((List<RandomList>) response.body().getData());
 
                     //跳转到其他界面
                     Navigation.findNavController(v).navigate(R.id.action_navigation_home_to_reciteFragment2);
                 }
 
                 @Override
-                public void onFailure(Call<List<RandomList>> call, Throwable t) {
+                public void onFailure(Call<Result<List<RandomList>>> call, Throwable t) {
                     Log.i(ERRCODE.REQUEST_FAILED.getMsgtype(), ERRCODE.REQUEST_FAILED.getMsg());
                 }
             });

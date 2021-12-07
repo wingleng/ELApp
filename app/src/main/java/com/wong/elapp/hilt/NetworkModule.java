@@ -42,7 +42,6 @@ public class NetworkModule {
     Retrofit provideRetrofit(OkHttpClient okHttpClient){
         Retrofit retrofit = new Retrofit.Builder()
                 .baseUrl("http://172.31.130.110:8888/")
-                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
 //                .addConverterFactory(ScalarsConverterFactory.create())
                 .build();
@@ -50,7 +49,7 @@ public class NetworkModule {
     }
 
     /**
-     * 最后配置mapper
+     * 最后配置mapper，这个Mapper可能需要两个。。
      */
     @Singleton
     @Provides

@@ -2,9 +2,10 @@ package com.wong.elapp.pojo.vo;
 
 
 /**
- * 使用这个类统一返回接口.可惜用不了lombok。好像和Dagger有冲突。。
+ * 这个Result是和后端的Result是一致的，就是多了一个泛型类T，是因为谷歌的gson无法自己推断，Object类型的数据应该转换为哪种类型，所以需要手动转换
+ * 这就导致了，一个问题吧，就是必须要和知道后端返回的Result的数据类型。
  */
-public class Result {
+public class Result <T>{
 
     private boolean success;
 
@@ -12,7 +13,7 @@ public class Result {
 
     private String msg;
 
-    private Object data;
+    private T data;
 
     public static Result success(Object data){
         return new Result(true,200,"success",data);
@@ -21,7 +22,7 @@ public class Result {
         return new Result(false,code,msg,null);
     }
 
-    public Result(boolean success, int code, String msg, Object data) {
+    public Result(boolean success, int code, String msg, T data) {
         this.success = success;
         this.code = code;
         this.msg = msg;
@@ -56,7 +57,7 @@ public class Result {
         return data;
     }
 
-    public void setData(Object data) {
+    public void setData(T data) {
         this.data = data;
     }
 

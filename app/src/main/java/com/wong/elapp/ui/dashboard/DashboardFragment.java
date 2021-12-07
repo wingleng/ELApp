@@ -49,6 +49,7 @@ public class DashboardFragment extends Fragment {
 
         final TextView textView = binding.textView;
         final Button btn = binding.button;
+        final Button regisBtn = binding.registBtn;
 
         /**
          * 一个点击按钮，测试用户注册
@@ -59,6 +60,24 @@ public class DashboardFragment extends Fragment {
                 @Override
                 public void onResponse(Call<Result> call, Response<Result> response) {
                     Log.i("应答数据：",response.body().toString());
+                }
+
+                @Override
+                public void onFailure(Call<Result> call, Throwable t) {
+                    Log.i(ERRCODE.REQUEST_FAILED.getMsgtype(), ERRCODE.REQUEST_FAILED.getMsg());
+                }
+            });
+        }));
+
+        /**
+         * 登录测试按钮
+         */
+        regisBtn.setOnClickListener((v -> {
+            Call<Result> call = localService.login(new LoginParam("旺财", "000000"));
+            call.enqueue(new Callback<Result>() {
+                @Override
+                public void onResponse(Call<Result> call, Response<Result> response) {
+                    Log.i("登录成功:",response.body().toString());
                 }
 
                 @Override

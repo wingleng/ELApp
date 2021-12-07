@@ -21,16 +21,23 @@ public interface LocalService {
      */
 
     @GET("findwords/randWord/10")
-    Call<List<RandomList>> getRandomWords();
+    Call<Result<List<RandomList>>> getRandomWords();
 
     @GET("findwords/test")
     Call<String> getTest();
 
     /**
-     * 配置用户注册和登录的接口
+     * 配置用户注册接口
      */
-
     @POST("user/addUser")
     Call<Result> registe(@Body LoginParam loginParam);
+
+    /**
+     * 配置用户登录接口
+     * @param loginParam
+     * @return
+     */
+    @POST("user/login")
+    Call<Result> login(@Body LoginParam loginParam);
 
 }
