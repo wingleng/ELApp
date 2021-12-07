@@ -18,6 +18,8 @@ import com.wong.elapp.R;
 import com.wong.elapp.databinding.FragmentDashboardBinding;
 import com.wong.elapp.network.mapper.LocalService;
 import com.wong.elapp.pojo.RandomList;
+import com.wong.elapp.pojo.vo.LoginParam;
+import com.wong.elapp.pojo.vo.Result;
 import com.wong.elapp.ui.home.HomeViewModel;
 import com.wong.elapp.utils.ERRCODE;
 
@@ -47,40 +49,25 @@ public class DashboardFragment extends Fragment {
 
         final TextView textView = binding.textView;
         final Button btn = binding.button;
-        homeViewModel.getText().observe(getViewLifecycleOwner(), new Observer<String>() {
-            @Override
-            public void onChanged(@Nullable String s) {
-                textView.setText(s);
-            }
-        });
 
-        btn.setOnClickListener((View v)->{
-           Call<List<RandomList>> call = localService.getRandomWords();
-           call.enqueue(new Callback<List<RandomList>>() {
-               @Override
-               public void onResponse(Call<List<RandomList>> call, Response<List<RandomList>> response) {
-                   Log.i(ERRCODE.REQUEST_SUCCESS.getMsgtype(),ERRCODE.REQUEST_SUCCESS.getMsg());
-               }
+        /**
+         * 一个点击按钮，测试用户注册
+         */
+        btn.setOnClickListener((v -> {
+            Call<Result> call = localService.registe(new LoginParam("旺财", "000000"));
+            call.enqueue(new Callback<Result>() {
+                @Override
+                public void onResponse(Call<Result> call, Response<Result> response) {
+                    Log.i("应答数据：",response.body().toString());
+                }
 
-               @Override
-               public void onFailure(Call<List<RandomList>> call, Throwable t) {
-                   Log.i(ERRCODE.REQUEST_FAILED.getMsgtype(), ERRCODE.REQUEST_FAILED.getMsg());
-               }
-           });
+                @Override
+                public void onFailure(Call<Result> call, Throwable t) {
+                    Log.i(ERRCODE.REQUEST_FAILED.getMsgtype(), ERRCODE.REQUEST_FAILED.getMsg());
+                }
+            });
+        }));
 
-//            Call<String> test = localService.getTest();
-//            test.enqueue(new Callback<String>() {
-//                @Override
-//                public void onResponse(Call<String> call, Response<String> response) {
-//                    Log.i(ERRCODE.REQUEST_SUCCESS.getMsgtype(), ERRCODE.REQUEST_SUCCESS.getMsg());
-//                }
-//
-//                @Override
-//                public void onFailure(Call<String> call, Throwable t) {
-//                    Log.i(ERRCODE.REQUEST_FAILED.getMsgtype(), ERRCODE.REQUEST_FAILED.getMsg());
-//                }
-//            });
-        });
         return root;
     }
 

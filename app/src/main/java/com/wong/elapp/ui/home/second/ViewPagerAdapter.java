@@ -55,8 +55,8 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.MyVi
 
         //设置卡片中的RecycleView，为其设置适配器。
         holder.wordlist.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));//设置好布局方向
-        List<String> means = mlist.get(position).getMeans()== null ? new ArrayList<>() : mlist.get(position).getMeans();//数据处理，防止为空
-        List<String> derives = mlist.get(position).getDerive()==null ? new ArrayList<>() : mlist.get(position).getDerive();
+        List<String> means = mlist.get(position).getMeans()== null ? new ArrayList<>() : new ArrayList<>(mlist.get(position).getMeans());//数据处理，防止为空
+        List<String> derives = mlist.get(position).getDerive()==null ? new ArrayList<>() :new ArrayList<>( mlist.get(position).getDerive());
 
         Log.i("中文释义",""+mlist.get(position).getMeans());
         Log.i("派生",""+mlist.get(position).getDerive());

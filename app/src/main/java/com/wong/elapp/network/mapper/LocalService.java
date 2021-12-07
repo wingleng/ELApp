@@ -1,11 +1,15 @@
 package com.wong.elapp.network.mapper;
 
 import com.wong.elapp.pojo.RandomList;
+import com.wong.elapp.pojo.vo.LoginParam;
+import com.wong.elapp.pojo.vo.Result;
 
 import java.util.List;
 
 import retrofit2.Call;
+import retrofit2.http.Body;
 import retrofit2.http.GET;
+import retrofit2.http.POST;
 import retrofit2.http.Path;
 
 public interface LocalService {
@@ -21,4 +25,12 @@ public interface LocalService {
 
     @GET("findwords/test")
     Call<String> getTest();
+
+    /**
+     * 配置用户注册和登录的接口
+     */
+
+    @POST("user/addUser")
+    Call<Result> registe(@Body LoginParam loginParam);
+
 }

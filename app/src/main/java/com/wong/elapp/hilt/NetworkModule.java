@@ -41,7 +41,7 @@ public class NetworkModule {
     @Provides
     Retrofit provideRetrofit(OkHttpClient okHttpClient){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://172.31.128.78:8888/")
+                .baseUrl("http://172.31.130.110:8888/")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
 //                .addConverterFactory(ScalarsConverterFactory.create())
@@ -57,5 +57,7 @@ public class NetworkModule {
     LocalService provideLocalService(Retrofit retrofit){
        return retrofit.create(LocalService.class);
     }
+
+
 
 }
