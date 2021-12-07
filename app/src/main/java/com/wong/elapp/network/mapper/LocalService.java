@@ -38,6 +38,6 @@ public interface LocalService {
      * @return
      */
     @POST("user/login")
-    Call<Result> login(@Body LoginParam loginParam);
+    Call<Result<String>> login(@Body LoginParam loginParam);
 
 }

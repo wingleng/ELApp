@@ -1,5 +1,6 @@
 package com.wong.elapp.hilt;
 
+import com.wong.elapp.network.TokenIncepter;
 import com.wong.elapp.network.mapper.LocalService;
 
 import java.util.concurrent.TimeUnit;
@@ -30,6 +31,7 @@ public class NetworkModule {
     OkHttpClient provideOkhttpForLocalService(){
         OkHttpClient okHttpClient = new OkHttpClient.Builder()
                 .connectTimeout(10, TimeUnit.SECONDS)
+                .addInterceptor(new TokenIncepter())
                 .build();
         return okHttpClient;
     }
@@ -41,7 +43,8 @@ public class NetworkModule {
     @Provides
     Retrofit provideRetrofit(OkHttpClient okHttpClient){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://172.31.130.110:8888/")
+                .baseUrl("http://172.18.54.6:8888/")
+                .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
 //                .addConverterFactory(ScalarsConverterFactory.create())
                 .build();

@@ -28,6 +28,7 @@ import com.wong.elapp.network.mapper.LocalService;
 import com.wong.elapp.pojo.RandomList;
 import com.wong.elapp.pojo.vo.Result;
 import com.wong.elapp.utils.ERRCODE;
+import com.wong.elapp.utils.WebError;
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -64,7 +65,7 @@ public class HomeFragment extends Fragment {
         circleProgressBar = binding.circleProgressBar;
 
 
-        //TODO:进度条组件仍未完成
+        //TODO:进度条组件仍未完成，需要显示总单词数量和当前用户已经背了的单词数量。
         //设置进度条
         circleProgressBar.setMaxValue(100);
         circleProgressBar.setProgress(30,true);
@@ -101,13 +102,19 @@ public class HomeFragment extends Fragment {
                 @Override
                 public void onResponse(Call<Result<List<RandomList>>> call, Response<Result<List<RandomList>>> response) {
                     Log.i(ERRCODE.REQUEST_SUCCESS.getMsgtype(), ERRCODE.REQUEST_SUCCESS.getMsg());
-                    Log.i("返回的数据：",response.body().toString());
-                    Log.i("数据类型：",response.body().getData().getClass()+"");
-                    List<RandomList> list = (List<RandomList>) response.body().getData();
-                    homeViewModel.setList_word((List<RandomList>) response.body().getData());
+                    if (response.body().getCode() == WebError.NO_LOGIN.getCode()){
+                        Log.i("没有登录：","当前资源无法访问");
+                    }else if (response.body().getCode() == 200){
+                        Log.i("登录成功：",response.body().getMsg());
+                        Log.i("返回的数据：",response.body().toString());
+                        List<RandomList> list = (List<RandomList>) response.body().getData();
+                        homeViewModel.setList_word((List<RandomList>) response.body().getData());
+                        //跳转到其他界面
+                        Navigation.findNavController(v).navigate(R.id.action_navigation_home_to_reciteFragment2);
+                    }
 
-                    //跳转到其他界面
-                    Navigation.findNavController(v).navigate(R.id.action_navigation_home_to_reciteFragment2);
+
+
                 }
 
                 @Override

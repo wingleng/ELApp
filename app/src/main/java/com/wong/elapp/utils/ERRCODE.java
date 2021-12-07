@@ -1,5 +1,9 @@
 package com.wong.elapp.utils;
 
+/**
+ * 这个枚举类主要是用来保存安卓app的错误
+ */
+
 public enum ERRCODE {
     REQUEST_SUCCESS("网络请求","请求发送成功"),
     REQUEST_FAILED("网络请求","请求发送失败");
