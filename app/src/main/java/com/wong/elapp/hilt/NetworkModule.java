@@ -1,10 +1,14 @@
 package com.wong.elapp.hilt;
 
+import com.wong.elapp.hilt.types.LocalMapper;
+import com.wong.elapp.hilt.types.LocalRetrofit;
+import com.wong.elapp.hilt.types.YoudaoRetrofit;
 import com.wong.elapp.network.TokenIncepter;
 import com.wong.elapp.network.mapper.LocalService;
 
 import java.util.concurrent.TimeUnit;
 
+import javax.inject.Inject;
 import javax.inject.Singleton;
 
 import dagger.Module;
@@ -24,7 +28,8 @@ public class NetworkModule {
      */
 
     /**
-     * 配置okhttp，默认配置的话是不需要的，但是如果需要使用拦截器的话（比如每次发送请求的时候需要带上凭证之类的)
+     * 配置okhttp,
+     * 这个okhttp是为连接本地的java服务器提供的。
      */
     @Singleton
     @Provides
@@ -36,14 +41,17 @@ public class NetworkModule {
         return okHttpClient;
     }
 
+
     /**
-     * 配置Retrofit，这个也可能需要配置两个不一样的
+     * 配置Retrofit，
+     * 这个retrofit是为本地java服务器提供的
      */
+    @LocalRetrofit
     @Singleton
     @Provides
     Retrofit provideRetrofit(OkHttpClient okHttpClient){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://172.18.54.6:8888/")
+                .baseUrl("http://172.31.129.16:8888/")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
 //                .addConverterFactory(ScalarsConverterFactory.create())
@@ -52,11 +60,28 @@ public class NetworkModule {
     }
 
     /**
-     * 最后配置mapper，这个Mapper可能需要两个。。
+     * 配置第二个retrofit,
+     * 这个retrofit是为有道翻译准备的
      */
+    @YoudaoRetrofit
     @Singleton
     @Provides
-    LocalService provideLocalService(Retrofit retrofit){
+    Retrofit provideRetrofitForYoudao(){
+        Retrofit retrofit2 = new Retrofit.Builder()
+                .baseUrl("https://openapi.youdao.com/api")
+                .addConverterFactory(ScalarsConverterFactory.create())
+                .build();
+        return retrofit2;
+    }
+
+    /**
+     * 配置Service，
+     * 这个是为Java服务器准备的。
+     */
+    @LocalMapper
+    @Singleton
+    @Provides
+    LocalService provideLocalService(@LocalRetrofit Retrofit retrofit){
        return retrofit.create(LocalService.class);
     }
 

@@ -24,6 +24,7 @@ import com.qmuiteam.qmui.widget.QMUIProgressBar;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.wong.elapp.R;
 import com.wong.elapp.databinding.FragmentHomeBinding;
+import com.wong.elapp.hilt.types.LocalMapper;
 import com.wong.elapp.network.mapper.LocalService;
 import com.wong.elapp.pojo.RandomList;
 import com.wong.elapp.pojo.vo.Result;
@@ -44,6 +45,8 @@ import retrofit2.Response;
 
 @AndroidEntryPoint
 public class HomeFragment extends Fragment {
+
+    @LocalMapper
     @Inject
     LocalService localService;
 

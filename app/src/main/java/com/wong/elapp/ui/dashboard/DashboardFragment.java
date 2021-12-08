@@ -16,6 +16,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import com.wong.elapp.R;
 import com.wong.elapp.databinding.FragmentDashboardBinding;
+import com.wong.elapp.hilt.types.LocalMapper;
 import com.wong.elapp.network.TokenIncepter;
 import com.wong.elapp.network.mapper.LocalService;
 import com.wong.elapp.pojo.RandomList;
@@ -37,6 +38,7 @@ import retrofit2.Response;
 @AndroidEntryPoint
 public class DashboardFragment extends Fragment {
 
+    @LocalMapper
     @Inject
     LocalService localService;
 
