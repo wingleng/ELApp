@@ -1,0 +1,12 @@
+<?xml version="1.0" encoding="utf-8"?>
+<paths xmlns:android="http://schemas.android.com/apk/res/android">
+<!--    files-path对应 content.getFileDir() 获取到的目录。-->
+<!--    cache-path对应 content.getCacheDir() 获取到的目录-->
+<!--    external-path对应 Environment.getExternalStorageDirectory() 指向的目录。-->
+<!--    external-files-path对应 ContextCompat.getExternalFilesDirs() 获取到的目录。-->
+<!--    external-cache-path对应 ContextCompat.getExternalCacheDirs() 获取到的目录。-->
+
+    <external-path
+        name="my_images"
+        path="."/>
+</paths>
