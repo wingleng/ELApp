@@ -94,4 +94,9 @@ dependencies {
     //导入Glide
         implementation 'com.github.bumptech.glide:glide:3.7.0'
 
+    //导入郭神的PermissionX，这个依赖看起来试用Kotlin写的，不知道java会不会有问题
+        implementation 'com.guolindev.permissionx:permissionx:1.6.1'
+
+
+
 }
