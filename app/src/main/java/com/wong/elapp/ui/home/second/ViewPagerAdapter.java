@@ -1,11 +1,14 @@
 package com.wong.elapp.ui.home.second;
 
 import android.content.Context;
+import android.media.MediaPlayer;
+import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.LinearLayoutManager;
@@ -16,13 +19,17 @@ import com.qmuiteam.qmui.widget.QMUIRadiusImageView;
 import com.wong.elapp.R;
 import com.wong.elapp.pojo.RandomList;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.List;
 
 public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.MyViewHolder> {
-    private List<RandomList> mlist;
-    Context context;
-    int cur_position;
+    private List<RandomList> mlist;//数据列表
+    Context context;//上下文
+    int cur_position;//当前的位置
+    String cur_voc;//当前单词的语音的位置
+    boolean has_voc;//当前单词是否有语音。
+    private MediaPlayer mediaPlayer;//音乐播放器
     public ViewPagerAdapter(List<RandomList> list) {
         mlist = list;
     }
@@ -38,18 +45,24 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.MyVi
     public MyViewHolder onCreateViewHolder(@NonNull ViewGroup parent, int viewType) {
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_singleword,parent,false);
         context = parent.getContext();
-
+        MyViewHolder viewHolder = new MyViewHolder(itemView);
         //为TextView2（即单词）设置点击事件，点击播放其读音
-        TextView textView2 = itemView.findViewById(R.id.textView2);
-        textView2.setOnClickListener(new WordOnClickListener());
+//        TextView textView2 = itemView.findViewById(R.id.textView2);
+//        textView2.setOnClickListener(new WordOnClickListener(viewHolder.getAdapterPosition()));
 
-        return new MyViewHolder(itemView);
+//        textView2.setOnClickListener(v -> {
+//            Log.i("点击事件 ","当前点击的位置"+viewHolder.getAdapterPosition());
+//        });
+
+
+
+        return viewHolder;
     }
 
     //这个方法负责设置组件
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-        cur_position = holder.getAdapterPosition();//将当前的位置传递出去。。。。主要是为什么这个方法里面不能设置事件监听器啊。。
+
         holder.mtextView.setText(mlist.get(position).getNames());//设置单词
         setGlide(holder,position);//设置图片
 
@@ -70,16 +83,40 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.MyVi
     }
 
 
-    //TODO:这里以后可能要实现一个viewPager2，将图片更换掉，这么多张的图片，只显示一张真的太可惜了。
+    //TODO:这里可能要嵌套一个ViewPager，只显示一张图片真的有点可惜。
     class MyViewHolder extends RecyclerView.ViewHolder{
         TextView mtextView;
         QMUIRadiusImageView imageView;
         RecyclerView wordlist;
-        public MyViewHolder(@NonNull View itemView) {
+        public MyViewHolder(@NonNull View itemView){
             super(itemView);
             mtextView = itemView.findViewById(R.id.textView2);//标题
             imageView = itemView.findViewById(R.id.img1);//图片
             wordlist = itemView.findViewById(R.id.wordlist);//recycleview
+
+            /*
+            设置点击单词播放语音的监听器
+             */
+            mtextView.setOnClickListener(v -> {
+                cur_position = getAdapterPosition();
+            Log.i("点击事件 ","当前点击的位置"+getAdapterPosition());
+
+            if (mlist.get(cur_position).getVoices().size()==0){
+                has_voc = false;
+                cur_voc = "";
+            }else {
+                has_voc = true;
+                cur_voc = mlist.get(cur_position).getVoices().get(0);//默认选择第一个，忘记是美式发音还是英式发音了。
+            };
+            Log.i("has_voc"+has_voc,"cur_voc"+cur_voc);
+
+//            播放音乐
+                try {
+                    playMusic();
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
         }
     }
 
@@ -100,13 +137,29 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.MyVi
         }
     }
 
-    /**
-     * 单词的点击监听器，用来播放音频，或者设置一些动画效果
-     */
-    class WordOnClickListener implements View.OnClickListener{
-        @Override
-        public void onClick(View v) {
-
+    //TODO:编写一个播放当前位置音乐的方法，需要能够比较准时的切换音乐
+    void playMusic() throws IOException {
+        if (cur_voc!=""){
+            if (mediaPlayer==null){
+                mediaPlayer = new MediaPlayer();
+                mediaPlayer.setDataSource(cur_voc);
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            }else if(mediaPlayer.isPlaying()){
+                mediaPlayer.reset();
+                mediaPlayer.setDataSource(cur_voc);
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            }else{
+                mediaPlayer = new MediaPlayer();
+                mediaPlayer.setDataSource(cur_voc);
+                mediaPlayer.prepare();
+                mediaPlayer.start();
+            }
+        }else{
+            Toast.makeText(context,"当前单词没有语音",Toast.LENGTH_SHORT).show();
         }
+
     }
+
 }

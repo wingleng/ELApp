@@ -46,7 +46,6 @@ import retrofit2.Response;
 @AndroidEntryPoint
 public class HomeFragment extends Fragment {
 
-    @LocalMapper
     @Inject
     LocalService localService;
 
@@ -128,18 +127,4 @@ public class HomeFragment extends Fragment {
         }
     }
 
-    /**
-     * next按钮的监听器
-     */
-    class Btn_NextListener implements View.OnClickListener{
-        Iterator<RandomList> it;
-        @Override
-        public void onClick(View v) {
-                it = homeViewModel.getItera_randlist().getValue();
-                if(it.hasNext()){
-                    //这一步有点多余，因为可以直接设置当前界面的。却设置到viewmodel中去，就为了那所谓的安全更新？
-                    homeViewModel.setWord_ui(it.next());
-                }
-        }
-    }
 }

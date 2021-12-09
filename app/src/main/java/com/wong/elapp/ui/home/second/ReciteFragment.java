@@ -66,9 +66,12 @@ public class ReciteFragment extends Fragment {
         btnLeft = binding.btnLeft;
         btnRight = binding.btnRight;
 
-        //对viewpage的设置
+        //对viewpager设置适配器：
         List<RandomList> rlist = homeViewModel.getList_word().getValue();//从viewmodel中获取到数据
-        viewPager2.setAdapter(new ViewPagerAdapter(rlist));//设置适配器
+        viewPager2.setAdapter(new ViewPagerAdapter(rlist));//设置适配器,需要把数据和当前fragment或者activity的上下文传进去，因为要使用音乐播放器。
+
+
+
         //设置Transformer的动画效果
         CompositePageTransformer compositePageTransformer = new CompositePageTransformer();
         int margin_px = DensityUtil.dip2px(getContext(),getResources().getDimension(R.dimen.activity_horizontal_margin));
@@ -77,6 +80,7 @@ public class ReciteFragment extends Fragment {
         compositePageTransformer.addTransformer(new AlphaAndScalePageTransformer());//设置左右滑动的效果
         viewPager2.setPageTransformer(compositePageTransformer);
         viewPager2.setOffscreenPageLimit(3);
+
 
         //配置页面滑动以及监听器
 //        viewPager2.setUserInputEnabled(false);//禁止用户进行滑动
