@@ -1,3 +1,6 @@
+#### 服务器端的代码：
+https://github.com/wingleng/Android_Server 
+
 #### 功能点
 
 * 背单词
