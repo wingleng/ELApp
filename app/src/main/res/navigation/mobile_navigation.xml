@@ -15,6 +15,9 @@
             app:destination="@id/reciteFragment2"
             app:enterAnim="@anim/grow_from_bottom"
             app:exitAnim="@anim/nav_default_exit_anim" />
+        <action
+            android:id="@+id/action_navigation_home_to_loginFragment"
+            app:destination="@id/loginFragment" />
     </fragment>
 
     <fragment
@@ -33,4 +36,9 @@
         android:name="com.wong.elapp.ui.home.second.ReciteFragment"
         android:label="fragment_recite"
         tools:layout="@layout/fragment_recite" />
+    <fragment
+        android:id="@+id/loginFragment"
+        android:name="com.wong.elapp.ui.others.LoginFragment"
+        android:label="fragment_login"
+        tools:layout="@layout/fragment_login" />
 </navigation>

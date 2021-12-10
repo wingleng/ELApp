@@ -1,7 +1,10 @@
 package com.wong.elapp.ui.home;
 
 import android.animation.ValueAnimator;
+import android.content.Context;
+import android.content.SharedPreferences;
 import android.os.Bundle;
+import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.MotionEvent;
@@ -13,8 +16,10 @@ import android.widget.TextView;
 import androidx.annotation.NonNull;
 import androidx.annotation.Nullable;
 import androidx.fragment.app.Fragment;
+import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.Observer;
 import androidx.lifecycle.ViewModelProvider;
+import androidx.navigation.NavController;
 import androidx.navigation.Navigation;
 
 import com.google.gson.Gson;
@@ -25,6 +30,7 @@ import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.wong.elapp.R;
 import com.wong.elapp.databinding.FragmentHomeBinding;
 import com.wong.elapp.hilt.types.LocalMapper;
+import com.wong.elapp.network.TokenIncepter;
 import com.wong.elapp.network.mapper.LocalService;
 import com.wong.elapp.pojo.RandomList;
 import com.wong.elapp.pojo.vo.Result;
@@ -32,6 +38,7 @@ import com.wong.elapp.utils.ERRCODE;
 import com.wong.elapp.utils.WebError;
 
 import java.util.ArrayList;
+import java.util.Date;
 import java.util.Iterator;
 import java.util.List;
 import java.util.ListIterator;
@@ -57,10 +64,22 @@ public class HomeFragment extends Fragment {
 
     private FragmentHomeBinding binding;
 
+    //在主界面设置一个登录检测，检测以前是否登录过，没有的话，就弹出登录界面。
+    private MutableLiveData<Boolean> wasLogined;
+
+    /**
+     * 组件初始化
+     * @param inflater
+     * @param container
+     * @param savedInstanceState
+     * @return
+     */
     public View onCreateView(@NonNull LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);//这里有点担心的问题就是，这个viewmodel是绑定到Fragment的，所以生命周期会不会收到影响
+        homeViewModel = new ViewModelProvider(requireActivity()).get(HomeViewModel.class);
         binding = FragmentHomeBinding.inflate(inflater, container, false);
         View root = binding.getRoot();
+        wasLogined = homeViewModel.getWasLogined();//这个是个动态数据。
+
 
         //获取组件引用
         qm_send_btn = binding.qmSend;
@@ -79,6 +98,8 @@ public class HomeFragment extends Fragment {
         });
 
 
+
+
         //发送请求
         qm_send_btn.setOnClickListener(new Btn_sendListenter());
 
@@ -91,6 +112,54 @@ public class HomeFragment extends Fragment {
         binding = null;
     }
 
+    /**
+     * 检查是否登录
+     * 因为界面跳转需要使用到view，上面的oncreateview中，view暂时还不能使用，所以就在这里进行登录的检查。
+     * @param view
+     * @param savedInstanceState
+     */
+    @Override
+    public void onViewCreated(@NonNull View view, @Nullable Bundle savedInstanceState) {
+        super.onViewCreated(view, savedInstanceState);
+        //检查登录：
+        if (wasLogined.getValue() == false){
+            Log.i("当前没有登录","自动跳转到登录界面");
+            checkLogin();
+        }
+    }
+
+    /**
+     * 检查方法
+     */
+    public void checkLogin(){
+        SharedPreferences sp = getContext().getSharedPreferences("config", Context.MODE_PRIVATE);
+        String token = sp.getString("TOKEN", "");
+        Long setTime = sp.getLong("setTime",0L);
+
+        if (!token.equals("")){//已经登录过，先检查时间，如果时间在期限之内，就将token放置到请求头中；如果过期了，就直接删除sp，然后拉出登录界面。
+            Date date = new Date();
+            Long now = date.getTime();
+            Long during = now - setTime;
+            if (during > 1000 * 60 * 60 * 2){//设定超时时间为两个小时，超时了就直接清空token和时间。
+                SharedPreferences.Editor editor = sp.edit();
+                editor.clear().commit();
+                //拉起登录界面
+                startLoginFragment();
+            }else{//还在时效内，设置token
+                TokenIncepter.TOKEN = token;
+                wasLogined.setValue(true);
+            }
+        }else{//之前没有登录过，所以这里直接拉出登录界面
+                startLoginFragment();
+        }
+    }
+
+    /**
+     * 拉起登录界面
+     */
+    public void startLoginFragment(){
+        Navigation.findNavController(getView()).navigate(R.id.loginFragment);
+    }
 
     /**
      * 发送请求按钮的监听器

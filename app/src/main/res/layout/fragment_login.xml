@@ -1,0 +1,82 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    tools:context=".ui.others.LoginFragment">
+
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline9"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.85" />
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:id="@+id/login_button"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:minHeight="48dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="10dp"
+        android:text="@string/login"
+
+        android:textColor="@color/s_app_color_blue_to_red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+
+        app:layout_constraintTop_toBottomOf="@+id/registerBtn"
+        app:layout_constraintVertical_bias="0.151"
+        app:qmui_backgroundColor="@color/s_app_color_blue_3"
+
+        app:qmui_borderColor="@color/s_app_color_blue_to_red"
+        app:qmui_isRadiusAdjustBounds="true"
+        app:qmui_radius="15dp"
+        app:qmui_skin_background="?attr/app_skin_btn_test_bg"
+        app:qmui_skin_border="?attr/app_skin_btn_test_border"
+        app:qmui_skin_text_color="?attr/app_skin_btn_test_border" />
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:id="@+id/registerBtn"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginTop="464dp"
+        android:minHeight="48dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="10dp"
+
+        android:text="@string/register"
+        android:textColor="@color/s_app_color_blue_to_red"
+
+        app:layout_constraintEnd_toStartOf="@+id/guideline9"
+        app:layout_constraintHorizontal_bias="0.488"
+
+        app:layout_constraintStart_toStartOf="@+id/guideline7"
+        app:layout_constraintTop_toTopOf="parent"
+        app:qmui_backgroundColor="@color/s_app_color_blue_3"
+
+        app:qmui_borderColor="@color/s_app_color_blue_to_red"
+        app:qmui_isRadiusAdjustBounds="true"
+        app:qmui_radius="15dp"
+        app:qmui_skin_background="?attr/app_skin_btn_test_bg"
+        app:qmui_skin_border="?attr/app_skin_btn_test_border"
+        app:qmui_skin_text_color="?attr/app_skin_btn_test_border" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline7"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="vertical"
+        app:layout_constraintGuide_percent="0.15815085" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

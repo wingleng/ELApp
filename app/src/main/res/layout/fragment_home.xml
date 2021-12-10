@@ -38,13 +38,24 @@
         android:paddingTop="10dp"
         android:paddingRight="16dp"
         android:paddingBottom="10dp"
-        android:text="圆角为短边的一半"
+        android:text="@string/start_recite"
+
+        android:textColor="@color/s_app_color_blue_to_red"
+        app:qmui_backgroundColor="@color/s_app_color_blue_3"
+        app:qmui_borderColor="@color/s_app_color_blue_to_red"
+
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.716"
-        app:qmui_isRadiusAdjustBounds="true" />
+        app:qmui_isRadiusAdjustBounds="true"
+
+        app:qmui_skin_background="?attr/app_skin_btn_test_bg"
+        app:qmui_skin_border="?attr/app_skin_btn_test_border"
+        app:qmui_skin_text_color="?attr/app_skin_btn_test_border"
+
+        />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

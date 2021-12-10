@@ -157,7 +157,7 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.MyVi
                 mediaPlayer.start();
             }
         }else{
-            Toast.makeText(context,"当前单词没有语音",Toast.LENGTH_SHORT).show();
+            Toast.makeText(context,"当前单词没有语音",Toast.LENGTH_LONG).show();
         }
 
     }

@@ -1,12 +1,28 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
+    <!-- skin attr define 这个好像是默认的皮肤-->
+    <attr name="app_skin_common_background" format="color|reference" />
+    <attr name="app_skin_common_background_1" format="color|reference" />
+    <attr name="app_skin_common_img_tint_color" format="color|reference" />
+    <attr name="app_skin_home_text_color" format="color|reference" />
+    <attr name="app_skin_common_title_text_color" format="color|reference" />
+    <attr name="app_skin_common_desc_text_color" format="color|reference" />
+    <attr name="app_skin_btn_test_bg" format="color|reference" />
+    <attr name="app_skin_btn_test_border" format="color|reference" />
+    <attr name="app_skin_btn_test_bg_single" format="color|reference" />
+    <attr name="app_skin_btn_test_border_single" format="color|reference" />
     <attr name="app_skin_progress_bar_bg_color" format="color|reference"/>
     <attr name="app_skin_progress_bar_progress_color" format="color|reference"/>
     <attr name="app_skin_progress_bar_text_color" format="color|reference"/>
+    <attr name="app_skin_span_normal_text_color" format="color"/>
+    <attr name="app_skin_span_pressed_text_color" format="color"/>
+    <attr name="app_skin_span_normal_bg_color" format="color"/>
+    <attr name="app_skin_span_pressed_bg_color" format="color"/>
+    <attr name="app_skin_alpha_test" format="float"/>
     <!-- Base application theme. -->
     <style name="Theme.ELAPP" parent="QMUI.Compat">
         <!-- Primary brand color. -->
-        <item name="colorPrimary">@color/purple_500</item>
-        <item name="colorPrimaryVariant">@color/purple_700</item>
+        <item name="colorPrimary">@color/app_color_blue</item>
+        <item name="colorPrimaryVariant">@color/app_color_blue_2</item>
         <item name="colorOnPrimary">@color/white</item>
         <!-- Secondary brand color. -->
         <item name="colorSecondary">@color/teal_200</item>
@@ -17,6 +33,9 @@
         <!-- Customize your theme here. -->
     </style>
 
+
+
+<!--    导入一些style-->
 
 
 </resources>
