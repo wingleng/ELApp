@@ -46,13 +46,6 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.MyVi
         View itemView = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_singleword,parent,false);
         context = parent.getContext();
         MyViewHolder viewHolder = new MyViewHolder(itemView);
-        //为TextView2（即单词）设置点击事件，点击播放其读音
-//        TextView textView2 = itemView.findViewById(R.id.textView2);
-//        textView2.setOnClickListener(new WordOnClickListener(viewHolder.getAdapterPosition()));
-
-//        textView2.setOnClickListener(v -> {
-//            Log.i("点击事件 ","当前点击的位置"+viewHolder.getAdapterPosition());
-//        });
 
 
 
@@ -62,10 +55,17 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.MyVi
     //这个方法负责设置组件
     @Override
     public void onBindViewHolder(@NonNull MyViewHolder holder, int position) {
-
+    /*
+    设置组件
+     */
         holder.mtextView.setText(mlist.get(position).getNames());//设置单词
         setGlide(holder,position);//设置图片
+        holder.imgsentence.setText(mlist.get(position).getExamples().get(0).getSentence());//设置图片配套句子
+        holder.fromText.setText(mlist.get(position).getExamples().get(0).getTitle());//设置图片出处
 
+        /*
+        设置卡片下部分的嵌套的RecycleView
+         */
         //设置卡片中的RecycleView，为其设置适配器。
         holder.wordlist.setLayoutManager(new LinearLayoutManager(context,LinearLayoutManager.VERTICAL,false));//设置好布局方向
         List<String> means = mlist.get(position).getMeans()== null ? new ArrayList<>() : new ArrayList<>(mlist.get(position).getMeans());//数据处理，防止为空
@@ -88,11 +88,18 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.MyVi
         TextView mtextView;
         QMUIRadiusImageView imageView;
         RecyclerView wordlist;
+        TextView imgsentence;
+        TextView fromText;
+
         public MyViewHolder(@NonNull View itemView){
             super(itemView);
             mtextView = itemView.findViewById(R.id.textView2);//标题
             imageView = itemView.findViewById(R.id.img1);//图片
             wordlist = itemView.findViewById(R.id.wordlist);//recycleview
+            imgsentence = itemView.findViewById(R.id.img_sentence);
+            fromText = itemView.findViewById(R.id.from_text);
+
+
 
             /*
             设置点击单词播放语音的监听器
@@ -117,6 +124,11 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.MyVi
                     e.printStackTrace();
                 }
             });
+
+            /*
+            * 设置点击图片句子播放语音的播放器
+             */
+
         }
     }
 

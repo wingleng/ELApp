@@ -20,12 +20,13 @@
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintVertical_bias="0.284"
+
         app:qmui_background_color="?attr/qmui_config_color_gray_8"
         app:qmui_progress_color="@color/app_color_blue_2"
         app:qmui_skin_background="?attr/app_skin_progress_bar_bg_color"
         app:qmui_skin_progress_color="?attr/app_skin_progress_bar_progress_color"
         app:qmui_skin_text_color="?attr/app_skin_progress_bar_text_color"
-        app:qmui_stroke_width="18dp"
+        app:qmui_stroke_width="25dp"
         app:qmui_type="type_circle" />
 
     <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
