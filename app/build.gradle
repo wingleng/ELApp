@@ -29,6 +29,19 @@ android {
     buildFeatures {
         viewBinding true
     }
+
+    //设置打包名字
+    applicationVariants.all { variant ->
+        variant.outputs.all {
+            outputFileName = "ELAPP_${defaultConfig.versionName}_${releaseTime()}.apk"
+        }
+    }
+
+}
+
+//时间方法
+def releaseTime() {
+    return new Date().format("yyyy-MM-dd", TimeZone.getTimeZone("UTC"))
 }
 
 dependencies {
