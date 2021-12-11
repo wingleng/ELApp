@@ -98,6 +98,8 @@ dependencies {
     //导入郭神的PermissionX，这个依赖看起来试用Kotlin写的，不知道java会不会有问题
         implementation 'com.guolindev.permissionx:permissionx:1.6.1'
 
+    //导入一个EditText
+        implementation 'com.github.florent37:materialtextfield:1.0.7'
 
 
 }

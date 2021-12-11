@@ -6,6 +6,59 @@
     android:layout_height="match_parent"
     tools:context=".ui.dashboard.childrens.dash_firstFragment">
 
+    <com.github.florent37.materialtextfield.MaterialTextField
+        android:id="@+id/materialTextField"
+        android:layout_width="300dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toTopOf="@+id/guideline8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.495"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="0.155"
+        app:mtf_image="@drawable/input"
+        app:mtf_labelColor="#666">
+
+        <EditText
+            android:id="@+id/dash1_edit"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:hint="输入文本"
+            android:textColor="#333"
+            android:textSize="15sp" />
+
+    </com.github.florent37.materialtextfield.MaterialTextField>
+
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:id="@+id/dash1_send"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:layout_marginStart="168dp"
+        android:layout_marginTop="19dp"
+        android:layout_marginEnd="168dp"
+        android:minHeight="48dp"
+        android:paddingLeft="16dp"
+        android:paddingTop="10dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="10dp"
+        android:text="翻译"
+        android:textColor="@color/s_app_color_blue_to_red"
+        app:layout_constraintBottom_toTopOf="@+id/guideline8"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/materialTextField"
+        app:layout_constraintVertical_bias="0.25"
+        app:qmui_backgroundColor="@color/s_app_color_blue_3"
+        app:qmui_borderColor="@color/s_app_color_blue_to_red"
+        app:qmui_isRadiusAdjustBounds="true"
+        app:qmui_radius="10dp"
+        app:qmui_skin_background="?attr/app_skin_btn_test_bg"
+        app:qmui_skin_border="?attr/app_skin_btn_test_border"
+        app:qmui_skin_text_color="?attr/app_skin_btn_test_border" />
+
     <TextView
         android:id="@+id/textView"
         android:layout_width="wrap_content"
@@ -15,4 +68,11 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline8"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.25" />
 </androidx.constraintlayout.widget.ConstraintLayout>

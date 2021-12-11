@@ -12,6 +12,7 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.Toast;
 
 import com.qmuiteam.qmui.util.QMUIToastHelper;
@@ -50,6 +51,10 @@ public class LoginFragment extends Fragment {
     QMUIRoundButton loginButton;
     QMUIRoundButton registerBtn;
 
+    EditText editAccount;
+    EditText editPassword;
+
+
     public LoginFragment() {
         // Required empty public constructor
     }
@@ -70,18 +75,25 @@ public class LoginFragment extends Fragment {
         wasLogined = homeViewModel.getWasLogined();
         loginButton = binding.loginButton;
         registerBtn = binding.registerBtn;
+        editAccount = binding.editAccount;
+        editPassword = binding.editPassword;
 
         loginButton.setOnClickListener(v->{
             {
-                Call<Result<String>> call = localService.login(new LoginParam("旺财", "000000"));
+                Call<Result<String>> call = localService.login(new LoginParam(editAccount.getText().toString(), editPassword.getText().toString()));
                 call.enqueue(new Callback<Result<String>>() {
                     @Override
                     public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
 
                         //根据后端返回的代码，进行操作。
                         Result res = response.body();
+                        if (res == null){
+                            QMUIToastHelper.show(Toast.makeText(getActivity(),"服务器返回数据为空",Toast.LENGTH_LONG));
+                            return ;
+                        }
                         if (res.getCode() == WebError.ACCOUNT_PWD_NOT_EXIST.getCode()){
                             Log.i("登录:","用户名或者密码不正确");
+                            QMUIToastHelper.show(Toast.makeText(getActivity(),"用户名或者密码不正确",Toast.LENGTH_LONG));
                         }else if (res.getCode() == 200){
                             Log.i("登录：",res.getMsg());
                             Log.i("登录：",res.getData()+"");
@@ -115,7 +127,7 @@ public class LoginFragment extends Fragment {
 
 
         registerBtn.setOnClickListener(v->{
-            Call<Result> call = localService.registe(new LoginParam("旺财", "000000"));
+            Call<Result> call = localService.registe(new LoginParam(editAccount.getText().toString(), editPassword.getText().toString()));
             call.enqueue(new Callback<Result>() {
                 @Override
                 public void onResponse(Call<Result> call, Response<Result> response) {
