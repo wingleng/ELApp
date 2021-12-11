@@ -1,14 +1,82 @@
 <?xml version="1.0" encoding="utf-8"?>
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     tools:context=".ui.dashboard.childrens.dash_secondFragment">
 
-    <!-- TODO: Update blank fragment layout -->
-    <TextView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
 
-</FrameLayout>
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:id="@+id/dash2_camer"
+        android:layout_width="89dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:minHeight="48dp"
+        android:paddingLeft="16dp"
+
+        android:paddingTop="10dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="10dp"
+        android:text="拍照翻译"
+        android:textColor="@color/s_app_color_blue_to_red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toEndOf="@+id/dash2_blum"
+        app:layout_constraintTop_toBottomOf="@+id/dash2_img"
+        app:layout_constraintVertical_bias="0.224"
+        app:qmui_backgroundColor="@color/s_app_color_blue_3"
+        app:qmui_borderColor="@color/s_app_color_blue_to_red"
+        app:qmui_isRadiusAdjustBounds="true"
+        app:qmui_radius="10dp"
+        app:qmui_skin_background="?attr/app_skin_btn_test_bg"
+        app:qmui_skin_border="?attr/app_skin_btn_test_border"
+        app:qmui_skin_text_color="?attr/app_skin_btn_test_border" />
+
+    <com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton
+        android:id="@+id/dash2_blum"
+        android:layout_width="89dp"
+        android:layout_height="wrap_content"
+        android:layout_gravity="center"
+        android:minHeight="48dp"
+        android:paddingLeft="16dp"
+
+        android:paddingTop="10dp"
+        android:paddingRight="16dp"
+        android:paddingBottom="10dp"
+        android:text="相册选择"
+        android:textColor="@color/s_app_color_blue_to_red"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toStartOf="@+id/dash2_camer"
+        app:layout_constraintHorizontal_bias="0.5"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/dash2_img"
+        app:layout_constraintVertical_bias="0.224"
+        app:qmui_backgroundColor="@color/s_app_color_blue_3"
+        app:qmui_borderColor="@color/s_app_color_blue_to_red"
+        app:qmui_isRadiusAdjustBounds="true"
+        app:qmui_radius="10dp"
+        app:qmui_skin_background="?attr/app_skin_btn_test_bg"
+        app:qmui_skin_border="?attr/app_skin_btn_test_border"
+        app:qmui_skin_text_color="?attr/app_skin_btn_test_border" />
+
+    <androidx.constraintlayout.widget.Guideline
+        android:id="@+id/guideline11"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        app:layout_constraintGuide_percent="0.8" />
+
+    <ImageView
+        android:id="@+id/dash2_img"
+        android:layout_width="0dp"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toTopOf="@+id/guideline11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        tools:src="@tools:sample/avatars" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
