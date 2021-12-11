@@ -65,66 +65,8 @@ public class DashboardFragment extends Fragment {
         View root = binding.getRoot();
 
         final TextView textView = binding.textView;
-        //TODO:以下两个按钮都只是测试注册和登录是否可用而已，以后需要单独创建一个fragment来提供这两个功能。
-        final Button btn = binding.button;
-        final Button regisBtn = binding.registBtn;
         final Button tranlBtn = binding.textTranslate;
 
-        /**
-         * 一个点击按钮，测试用户注册
-         */
-        btn.setOnClickListener((v -> {
-            Call<Result> call = localService.registe(new LoginParam("旺财", "000000"));
-            call.enqueue(new Callback<Result>() {
-                @Override
-                public void onResponse(Call<Result> call, Response<Result> response) {
-                    Log.i("应答数据：",response.body().toString());
-                }
-
-                @Override
-                public void onFailure(Call<Result> call, Throwable t) {
-                    Log.i(ERRCODE.REQUEST_FAILED.getMsgtype(), ERRCODE.REQUEST_FAILED.getMsg());
-                }
-            });
-        }));
-
-        /**
-         * 登录测试按钮
-         */
-        regisBtn.setOnClickListener((v -> {
-            Call<Result<String>> call = localService.login(new LoginParam("旺财", "000000"));
-            call.enqueue(new Callback<Result<String>>() {
-                @Override
-                public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
-
-                    //根据后端返回的代码，进行操作。
-                    Result res = response.body();
-                    if (res.getCode() == WebError.ACCOUNT_PWD_NOT_EXIST.getCode()){
-                            Log.i("登录:","用户名或者密码不正确");
-                    }else if (res.getCode() == 200){
-                            Log.i("登录：",res.getMsg());
-                            Log.i("登录：",res.getData()+"");
-
-                            TokenIncepter.TOKEN = (String) res.getData();//设置拦截器的token，以后每次发送请求的时候回带上token
-
-                            //将服务器返回的token存起来，可以用来避免多次登录。
-                            SharedPreferences sp = getContext().getSharedPreferences("config", Context.MODE_PRIVATE);
-                            SharedPreferences.Editor editor = sp.edit();
-                            editor.putString("TOKEN",(String)res.getData());
-                            editor.putLong("setTime",new Date().getTime());
-                            editor.commit();
-
-                    }else if (res.getCode() == WebError.NO_LOGIN.getCode()){
-                            Log.i("没有登录：","没有登录，无法访问这些资源");
-                    }
-                }
-
-                @Override
-                public void onFailure(Call<Result<String>> call, Throwable t) {
-                    Log.i(ERRCODE.REQUEST_FAILED.getMsgtype(), ERRCODE.REQUEST_FAILED.getMsg());
-                }
-            });
-        }));
 
         /**
          * 有道翻译接口的测试

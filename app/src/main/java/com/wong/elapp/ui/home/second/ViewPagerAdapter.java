@@ -2,7 +2,6 @@ package com.wong.elapp.ui.home.second;
 
 import android.content.Context;
 import android.media.MediaPlayer;
-import android.os.Handler;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -27,8 +26,11 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.MyVi
     private List<RandomList> mlist;//数据列表
     Context context;//上下文
     int cur_position;//当前的位置
-    String cur_voc;//当前单词的语音的位置
+    String curVoc_word;//当前单词的语音的位置
     boolean has_voc;//当前单词是否有语音。
+    String curVoc_img;//当前图片的语音的位置
+    boolean has_voc_img;//当前图片是否有语音
+
     private MediaPlayer mediaPlayer;//音乐播放器
     public ViewPagerAdapter(List<RandomList> list) {
         mlist = list;
@@ -106,20 +108,19 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.MyVi
              */
             mtextView.setOnClickListener(v -> {
                 cur_position = getAdapterPosition();
-            Log.i("点击事件 ","当前点击的位置"+getAdapterPosition());
 
             if (mlist.get(cur_position).getVoices().size()==0){
                 has_voc = false;
-                cur_voc = "";
+                curVoc_word = "";
             }else {
                 has_voc = true;
-                cur_voc = mlist.get(cur_position).getVoices().get(0);//默认选择第一个，忘记是美式发音还是英式发音了。
+                curVoc_word = mlist.get(cur_position).getVoices().get(0);//默认选择第一个，忘记是美式发音还是英式发音了。
             };
-            Log.i("has_voc"+has_voc,"cur_voc"+cur_voc);
+            Log.i("has_voc"+has_voc,"curVoc_word"+ curVoc_word);
 
 //            播放音乐
                 try {
-                    playMusic();
+                    playMusic(curVoc_word);
                 } catch (IOException e) {
                     e.printStackTrace();
                 }
@@ -128,6 +129,23 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.MyVi
             /*
             * 设置点击图片句子播放语音的播放器
              */
+            imageView.setOnClickListener(v->{
+                int cur = getAdapterPosition();
+                //判断是否有语音，其实这个判断完全没必要，因为后端数据设置了过滤器，能够返回的数据，全部都是有图片和音频的。。。。。。
+                if (mlist.get(cur).getExamples().size()==0){
+                    curVoc_img = "";
+                    has_voc_img = false;
+                }else{
+                    curVoc_img = mlist.get(cur).getExamples().get(0).getAudio();
+                    has_voc_img = true;
+                }
+                //播放音乐
+                try {
+                    playMusic(curVoc_img);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            });
 
         }
     }
@@ -150,21 +168,21 @@ public class ViewPagerAdapter extends RecyclerView.Adapter<ViewPagerAdapter.MyVi
     }
 
     //TODO:编写一个播放当前位置音乐的方法，需要能够比较准时的切换音乐
-    void playMusic() throws IOException {
-        if (cur_voc!=""){
+    void playMusic(String source) throws IOException {
+        if (source !=""){
             if (mediaPlayer==null){
                 mediaPlayer = new MediaPlayer();
-                mediaPlayer.setDataSource(cur_voc);
+                mediaPlayer.setDataSource(source);
                 mediaPlayer.prepare();
                 mediaPlayer.start();
             }else if(mediaPlayer.isPlaying()){
                 mediaPlayer.reset();
-                mediaPlayer.setDataSource(cur_voc);
+                mediaPlayer.setDataSource(source);
                 mediaPlayer.prepare();
                 mediaPlayer.start();
             }else{
                 mediaPlayer = new MediaPlayer();
-                mediaPlayer.setDataSource(cur_voc);
+                mediaPlayer.setDataSource(source);
                 mediaPlayer.prepare();
                 mediaPlayer.start();
             }
