@@ -129,7 +129,7 @@ public class dash_secondFragment extends Fragment {
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-        if (requestCode == BLUM_SELECT){
+        if (requestCode == BLUM_SELECT && resultCode == RESULT_OK){
             Glide.with(context).load(data.getData()).into(dash2Img);
         }
 
