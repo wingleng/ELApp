@@ -15,6 +15,7 @@ import java.util.List;
 
 public class ExplainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
     List<String> explains;
+    public ExplainAdapter(){}
     public ExplainAdapter(List<String> explains) {
         this.explains = explains;
     }
@@ -43,5 +44,13 @@ public class ExplainAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder
             super(itemView);
             textView = itemView.findViewById(R.id.worditem);
         }
+    }
+
+    public List<String> getExplains() {
+        return explains;
+    }
+
+    public void setExplains(List<String> explains) {
+        this.explains = explains;
     }
 }

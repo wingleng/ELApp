@@ -33,6 +33,7 @@ import com.wong.elapp.utils.ERRCODE;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -162,12 +163,21 @@ public class dash_firstFragment extends Fragment {
         dash1RecycleWeb = binding.dash1RecycleWeb;
 
 
+        //翻译按钮
         dash1Send.setOnClickListener(v->{
             String querycontent = dash1Edit.getText().toString();
 //            isVisable.setValue(!isVisable.getValue());
+
             if (querycontent.length()== 0){
                 QMUIToastHelper.show(Toast.makeText(getActivity(),"输入不能为空",Toast.LENGTH_LONG));
             }else{
+                if (explainAdapter!=null || webAdapter!=null){
+                    //发送请求之前，先清空之前的数据。。
+                    explainAdapter.setExplains(new ArrayList<>());
+                    webAdapter.setWebs(new ArrayList<>());
+                    explainAdapter.notifyDataSetChanged();
+                    webAdapter.notifyDataSetChanged();
+                }
                 sendQuery(querycontent);
             }
         });
@@ -184,12 +194,15 @@ public class dash_firstFragment extends Fragment {
                     explainAdapter = new ExplainAdapter(youdaoResult.getBasic().getExplains());
                     dash1RecycleExplain.setAdapter(explainAdapter);
                 }
+
                 if (youdaoResult.getWeb()!=null){
                     //设置网络释义
                     dash1RecycleWeb.setLayoutManager(new LinearLayoutManager(getContext(),LinearLayoutManager.VERTICAL,false));
                     webAdapter = new WebAdapter(youdaoResult.getWeb());
                     dash1RecycleWeb.setAdapter(webAdapter);
                 }
+
+
             }
         });
 

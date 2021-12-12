@@ -16,8 +16,8 @@ import com.wong.elapp.pojo.vo.Youdaoresult.Web;
 import java.util.List;
 
 public class WebAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
-    private final List<Web> webs;
-
+    private List<Web> webs;
+    public WebAdapter(){}
     public WebAdapter(List<Web> webs) {
         this.webs = webs;
     }
@@ -47,5 +47,14 @@ public class WebAdapter extends RecyclerView.Adapter<RecyclerView.ViewHolder> {
             super(itemView);
             textView = itemView.findViewById(R.id.worditem);
         }
+    }
+
+
+    public List<Web> getWebs() {
+        return webs;
+    }
+
+    public void setWebs(List<Web> webs) {
+        this.webs = webs;
     }
 }
