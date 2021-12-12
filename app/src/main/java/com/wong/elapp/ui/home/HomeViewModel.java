@@ -5,6 +5,8 @@ import androidx.lifecycle.MutableLiveData;
 import androidx.lifecycle.ViewModel;
 
 import com.wong.elapp.pojo.RandomList;
+import com.wong.elapp.pojo.vo.Youdaoresult.YoudaoResult;
+
 
 import java.util.ArrayList;
 import java.util.Iterator;
@@ -16,10 +18,14 @@ public class HomeViewModel extends ViewModel {
         itera_randlist = new MutableLiveData<>();
         wasLogined = new MutableLiveData<>();
         wasLogined.setValue(false);
+
+        YoudaoResult = new MutableLiveData<>();
     }
     private MutableLiveData<Boolean> wasLogined;//一个用来检测是否登录过的变量。
 
-    //设置随机单词，但是感觉没有必要使用livedata进行监视，因为这个数据应该只在请求的时候设置一次。不过为了所谓的生命周期风险，还是写一下吧。
+    /**
+     @data ReciteFragment的数据，展示单词。
+     */
     private MutableLiveData<List<RandomList>> list_word;
 
     //设置要展示的单词，这个应该需要进行监视了
@@ -28,6 +34,15 @@ public class HomeViewModel extends ViewModel {
     //这里需要维护一个迭代器。使用这个迭代器对list进行操作。
     private MutableLiveData<Iterator<RandomList>> itera_randlist;
 
+    /**
+    @data dash_firstFragment的界面的数据，保存翻译结果
+     */
+    private MutableLiveData<YoudaoResult> YoudaoResult;
+
+    /**
+     @data dash_firstFragment 控制一些组件是否显示。
+     */
+    private MutableLiveData<Boolean> isVisable;
 
     //随机单词列表，list_word的设置
     public MutableLiveData<List<RandomList>> getList_word() {
@@ -58,12 +73,43 @@ public class HomeViewModel extends ViewModel {
 
     //是否登录标志
 
-
     public MutableLiveData<Boolean> getWasLogined() {
         return wasLogined;
     }
 
     public void setWasLogined(MutableLiveData<Boolean> wasLogined) {
         this.wasLogined = wasLogined;
+    }
+
+    /**
+     * Getter and Setter Youdaoresult
+     * @data dash_firstFragment的界面的数据，保存翻译结果
+     * @return
+     */
+    public MutableLiveData<YoudaoResult> getYoudaoResult() {
+
+        return YoudaoResult;
+    }
+
+    public void setYoudaoResult(YoudaoResult youdaoResult) {
+        YoudaoResult.setValue(youdaoResult);
+    }
+
+    /**
+     * Getter and Setter isVisable
+     * @data dash_firstFragment 控制一些组件是否显示。
+     * @return
+     */
+    public MutableLiveData<Boolean> getIsVisable() {
+        if (isVisable == null){
+            MutableLiveData<Boolean> cur = new MutableLiveData<>();
+            cur.setValue(false);
+            isVisable = cur;
+        }
+        return isVisable;
+    }
+
+    public void setIsVisable(Boolean isVisable) {
+        this.isVisable.setValue(isVisable);
     }
 }
