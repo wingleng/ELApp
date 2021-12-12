@@ -242,6 +242,10 @@ public class dash_firstFragment extends Fragment {
 
                     //将数据扔到ViewModel当中
                     homeViewModel.setYoudaoResult(youdaoResult);
+
+                    //同时通知两个适配器，刷新数据。。。
+                    explainAdapter.notifyDataSetChanged();
+                    webAdapter.notifyDataSetChanged();
                 }
             }
 
