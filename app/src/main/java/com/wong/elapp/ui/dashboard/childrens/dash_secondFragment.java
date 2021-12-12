@@ -18,6 +18,7 @@ import androidx.lifecycle.ViewModelProvider;
 
 import android.os.Environment;
 import android.provider.MediaStore;
+import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -29,22 +30,41 @@ import com.permissionx.guolindev.PermissionX;
 import com.permissionx.guolindev.callback.ExplainReasonCallbackWithBeforeParam;
 import com.permissionx.guolindev.callback.RequestCallback;
 import com.permissionx.guolindev.request.ExplainScope;
+import com.qmuiteam.qmui.util.QMUIToastHelper;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.wong.elapp.R;
 import com.wong.elapp.databinding.FragmentDashSecondBinding;
+import com.wong.elapp.hilt.types.YoudaoRetrofit;
+import com.wong.elapp.network.mapper.YoudaoService;
+import com.wong.elapp.pojo.vo.YoudaoresultPic2Text.YoudaoresultPic2Text;
 import com.wong.elapp.ui.home.HomeViewModel;
 import com.wong.elapp.ui.notifications.NotificationsFragment;
+import com.wong.elapp.utils.BitMap2Base64;
+import com.wong.elapp.utils.ERRCODE;
 
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.security.MessageDigest;
+import java.security.NoSuchAlgorithmException;
+import java.util.HashMap;
 import java.util.List;
+import java.util.Map;
+
+import javax.inject.Inject;
+
+import dagger.hilt.android.AndroidEntryPoint;
+import retrofit2.Call;
+import retrofit2.Callback;
+import retrofit2.Response;
 
 /**
  * A simple {@link Fragment} subclass.
  * Use the {@link dash_secondFragment#newInstance} factory method to
  * create an instance of this fragment.
  */
+@AndroidEntryPoint
 public class dash_secondFragment extends Fragment {
 
     // TODO: Rename parameter arguments, choose names that match
@@ -64,6 +84,16 @@ public class dash_secondFragment extends Fragment {
     QMUIRoundButton dash2Blum;
     ImageView dash2Img;
     Context context;
+
+    String FROM = "auto";//翻译要转换的类型。
+    String TO = "auto";
+
+    //有道翻译的服务
+    @Inject
+    YoudaoService youdaoService;
+
+    //图片查询结果：
+    YoudaoresultPic2Text youdaoResult;
 
 
     private final int BLUM_SELECT=100;
@@ -124,7 +154,7 @@ public class dash_secondFragment extends Fragment {
     }
 
     /**
-     * 设置回调
+     * 选择图片或者拍照之后的回调
      */
     @Override
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
@@ -137,8 +167,10 @@ public class dash_secondFragment extends Fragment {
         if (requestCode == CAMER_CAPTURE && resultCode == RESULT_OK){
             try {
                 Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(imageUri));
-                dash2Img.setImageBitmap(bitmap);
-                //将图片解析成Bitmap对象，并把它显现出来
+                dash2Img.setImageBitmap(bitmap);//这步其实可以去掉，展示原始图片感觉没有必要
+                String base64 = BitMap2Base64.bitmaptoString(bitmap,100);
+                sendPic2TextQuery(base64,FROM,TO);
+
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
@@ -167,6 +199,73 @@ public class dash_secondFragment extends Fragment {
                         }
                     }
                 });
+    }
+
+    /**
+     * 将获取到的图片转化到base64之后，发送到翻译服务器当中。
+     * 然后将返回的图片再进行处理。
+     */
+    public void sendPic2TextQuery(String base64,String from,String to){
+        String APP_KEY = getResources().getString(R.string.app_key);
+        String APP_SECRET = getResources().getString(R.string.app_secret);
+
+        Map<String,String> params = new HashMap<String,String>();
+        String salt = String.valueOf(System.currentTimeMillis());
+        String type = "1";//设置发送类型为base64
+        String signStr = APP_KEY +base64 + salt + APP_SECRET;
+        String sign = getDigest(signStr);
+        params.put("from",from);
+        params.put("to",to);
+        params.put("type",type);
+        params.put("q",base64);
+        params.put("appKey",APP_KEY);
+        params.put("salt",salt);
+        params.put("sign",sign);
+
+        Call<YoudaoresultPic2Text> call = youdaoService.pic2text(params);
+        call.enqueue(new Callback<YoudaoresultPic2Text>() {
+            @Override
+            public void onResponse(Call<YoudaoresultPic2Text> call, Response<YoudaoresultPic2Text> response) {
+                if(response.body()==null){
+                    QMUIToastHelper.show(Toast.makeText(getActivity(),"出现异常，服务器返回的数据为空",Toast.LENGTH_LONG));
+                }else {
+                    Log.i("有道请求成功","内容"+response.body().getResRegions().toString());
+                    youdaoResult = response.body();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<YoudaoresultPic2Text> call, Throwable t) {
+                    Log.i(ERRCODE.REQUEST_FAILED.getMsgtype(), ERRCODE.REQUEST_FAILED.getMsg());
+                    QMUIToastHelper.show(Toast.makeText(getActivity(),"请求发送失败",Toast.LENGTH_LONG));
+            }
+        });
+    }
+
+    /**
+     * 生成md5加密字段
+     */
+    public static String getDigest(String string) {
+        if (string == null) {
+            return null;
+        }
+        char hexDigits[] = {'0', '1', '2', '3', '4', '5', '6', '7', '8', '9', 'A', 'B', 'C', 'D', 'E', 'F'};
+        byte[] btInput = string.getBytes(StandardCharsets.UTF_8);
+        try {
+            MessageDigest mdInst = MessageDigest.getInstance("MD5");
+            mdInst.update(btInput);
+            byte[] md = mdInst.digest();
+            int j = md.length;
+            char str[] = new char[j * 2];
+            int k = 0;
+            for (byte byte0 : md) {
+                str[k++] = hexDigits[byte0 >>> 4 & 0xf];
+                str[k++] = hexDigits[byte0 & 0xf];
+            }
+            return new String(str);
+        } catch (NoSuchAlgorithmException e) {
+            return null;
+        }
     }
 
     /**
@@ -217,5 +316,7 @@ public class dash_secondFragment extends Fragment {
             startActivityForResult(gallery, BLUM_SELECT);
         }
     }
+
+
 
 }
