@@ -2,11 +2,13 @@ package com.wong.elapp.hilt;
 
 import android.media.MediaPlayer;
 
+import com.wong.elapp.hilt.types.BaiduRetrofit;
 import com.wong.elapp.hilt.types.LocalMapper;
 import com.wong.elapp.hilt.types.LocalRetrofit;
 import com.wong.elapp.hilt.types.YoudaoMapper;
 import com.wong.elapp.hilt.types.YoudaoRetrofit;
 import com.wong.elapp.network.TokenIncepter;
+import com.wong.elapp.network.mapper.BaiduService;
 import com.wong.elapp.network.mapper.LocalService;
 import com.wong.elapp.network.mapper.YoudaoService;
 
@@ -94,6 +96,21 @@ public class NetworkModule {
     }
 
     /**
+     * 配置第三个Retrofit，
+     * 这个Retrofit是为百度翻译准备的
+     */
+    @BaiduRetrofit
+    @Singleton
+    @Provides
+    Retrofit provideRetrofitForBaidu(){
+        Retrofit retrofit3 = new Retrofit.Builder()
+                .baseUrl("https://aip.baidubce.com/")
+                .addConverterFactory(GsonConverterFactory.create())
+                .build();
+        return retrofit3;
+    }
+
+    /**
      * 配置Service，
      * 这个是为Java服务器准备的。
      */
@@ -111,6 +128,18 @@ public class NetworkModule {
     @Provides
     YoudaoService provideYoudaoService(@YoudaoRetrofit Retrofit retrofit2){
         return retrofit2.create(YoudaoService.class);
+    }
+
+    /**
+     * 配置Service
+     * 这个是为百度翻译准备的。
+     * @param retrofit3
+     * @return
+     */
+    @Singleton
+    @Provides
+    BaiduService provideBaiduService(@BaiduRetrofit Retrofit retrofit3){
+        return retrofit3.create(BaiduService.class);
     }
 
 

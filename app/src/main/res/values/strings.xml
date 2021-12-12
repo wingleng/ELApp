@@ -12,4 +12,8 @@
     <string name="app_secret">DePFvNrafw6FKqFzYKYJsXrF9fOXmLXl</string>
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment">Hello blank fragment</string>
+
+    <!--  百度云的翻译api  -->
+    <string name="baidu_key">S4fkGXW4cni0yTAc6ypN4gDU</string>
+    <string name="baidu_secret">mbsUqidLOT8PGNIbtIKsF8sIh8bGvYha</string>
 </resources>

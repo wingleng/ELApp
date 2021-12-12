@@ -35,7 +35,10 @@ import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.wong.elapp.R;
 import com.wong.elapp.databinding.FragmentDashSecondBinding;
 import com.wong.elapp.hilt.types.YoudaoRetrofit;
+import com.wong.elapp.network.mapper.BaiduService;
 import com.wong.elapp.network.mapper.YoudaoService;
+import com.wong.elapp.pojo.vo.Baidu.accesstoken.Access_Token;
+import com.wong.elapp.pojo.vo.Baidu.resultData.resultData;
 import com.wong.elapp.pojo.vo.YoudaoresultPic2Text.YoudaoresultPic2Text;
 import com.wong.elapp.ui.home.HomeViewModel;
 import com.wong.elapp.ui.notifications.NotificationsFragment;
@@ -55,6 +58,9 @@ import java.util.Map;
 import javax.inject.Inject;
 
 import dagger.hilt.android.AndroidEntryPoint;
+import okhttp3.MediaType;
+import okhttp3.MultipartBody;
+import okhttp3.RequestBody;
 import retrofit2.Call;
 import retrofit2.Callback;
 import retrofit2.Response;
@@ -92,8 +98,17 @@ public class dash_secondFragment extends Fragment {
     @Inject
     YoudaoService youdaoService;
 
+    //百度翻译
+    @Inject
+    BaiduService baiduService;
+    static String Token = null;
+
     //图片查询结果：
     YoudaoresultPic2Text youdaoResult;
+
+    //拍照的缓存
+    File outputImage;
+
 
 
     private final int BLUM_SELECT=100;
@@ -146,7 +161,8 @@ public class dash_secondFragment extends Fragment {
         dash2Blum = binding.dash2Blum;
         dash2Img = binding.dash2Img;
 
-        dash2Camer.setOnClickListener(new dash_secondFragment.CamerBtnListener());
+//        dash2Camer.setOnClickListener(new dash_secondFragment.CamerBtnListener());
+        dash2Camer.setOnClickListener(new CamerBtnListener());
         dash2Blum.setOnClickListener(new dash_secondFragment.BlumBtnListeber());
 
 
@@ -169,7 +185,14 @@ public class dash_secondFragment extends Fragment {
                 Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(imageUri));
                 dash2Img.setImageBitmap(bitmap);//这步其实可以去掉，展示原始图片感觉没有必要
                 String base64 = BitMap2Base64.bitmaptoString(bitmap,100);
+
+                //发送请求，获取图片的文字内容
                 sendPic2TextQuery(base64,FROM,TO);
+
+                //发送请求，直接返回图片
+//                getToken();
+//                sendPic2Pic(outputImage);
+
 
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
@@ -268,6 +291,77 @@ public class dash_secondFragment extends Fragment {
         }
     }
 
+    /************************************************************
+     * 以下是百度翻译
+     ************************************************************/
+
+
+    /**
+     * 由于百度翻译是需要token的，所以在发送翻译请求之前，需要先请求一个token
+     */
+    public void getToken(){
+
+        Call<Access_Token> call = baiduService.getToken("client_credentials",
+                getResources().getString(R.string.baidu_key),
+                getResources().getString(R.string.baidu_secret));
+
+        call.enqueue(new Callback<Access_Token>() {
+            @Override
+            public void onResponse(Call<Access_Token> call, Response<Access_Token> response) {
+                if (response.body()!=null){
+                    Log.i("返回的token",response.body().getAccessToken());
+                    Log.i("Token错误码：","errcode:"+response.body().getExpiresIn());
+                    Token = response.body().getAccessToken();
+                }
+            }
+
+            @Override
+            public void onFailure(Call<Access_Token> call, Throwable t) {
+                Log.i(ERRCODE.REQUEST_FAILED.getMsgtype(), ERRCODE.REQUEST_FAILED.getMsg());
+            }
+        });
+    }
+
+    /**
+     * 发送上面拍照缓存下来的照片，希望不会有什么大事
+     * @param file
+     */
+    public void sendPic2Pic(File file){
+        if (!file.exists())file =null;
+        //构建文件部分的请求体
+        RequestBody requestBody = null;
+        //声明请求体的类型为文件表单类型
+        MediaType mediaType = MediaType.parse("multipart/form-data");
+        //创建请求体
+        requestBody = RequestBody.create(mediaType, file);
+        //创建文件表单的请求体，将文件请求体，文本参数放进表单当中
+        MultipartBody multipartBody = new MultipartBody.Builder()
+                .addFormDataPart("image",file.getName(),requestBody)
+                .addFormDataPart("from","auto")
+                .addFormDataPart("to","zh")
+                .addFormDataPart("v","3")
+                .addFormDataPart("paste","1")
+                .build();
+
+
+
+        Call<resultData> resultDataCall = baiduService.sendPic(multipartBody, Token);
+        resultDataCall.enqueue(new Callback<resultData>() {
+            @Override
+            public void onResponse(Call<resultData> call, Response<resultData> response) {
+                if (response.body()!=null) {
+                    Log.i("发过去的Token","Tok:"+Token);
+                    Log.i("请求发送成功？", "response:" + response.body().getErrorCode()+response.body().getErrorMsg());
+                }
+            }
+
+            @Override
+            public void onFailure(Call<resultData> call, Throwable t) {
+
+            }
+        });
+    }
+
     /**
      * 使用相机进行拍摄
      */
@@ -277,7 +371,7 @@ public class dash_secondFragment extends Fragment {
             //首先申请相机权限：
             getPermission();
 
-            File outputImage = new File(filePath);
+            outputImage = new File(filePath);
 
             //判断图片文件是否存在
             try {
