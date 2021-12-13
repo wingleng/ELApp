@@ -10,7 +10,7 @@
         <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/layout/fragment_contain.xml" value="0.26621847886098404" />
         <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/layout/fragment_containter.xml" value="0.13177083333333334" />
         <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/layout/fragment_dash_first.xml" value="0.20168066580377575" />
-        <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/layout/fragment_dash_second.xml" value="0.26621847886098404" />
+        <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/layout/fragment_dash_second.xml" value="0.14521007937871855" />
         <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/layout/fragment_dashboard.xml" value="0.22735507246376813" />
         <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/layout/fragment_home.xml" value="0.26621847886098404" />
         <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/layout/fragment_login.xml" value="0.1" />
@@ -23,6 +23,7 @@
         <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.26927083333333335" />
         <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/mipmap-anydpi-v26/ic_launcher_round.xml" value="0.16875" />
         <entry key="..\:/DevPlace-E/AndroidDemos/ELAPP/app/src/main/res/xml/network_security_config.xml" value="0.1" />
+        <entry key="..\:/DevPlace-E/DevelopEnvironments/AndroidSDK/platforms/android-31/data/res/drawable/edit_text.xml" value="0.1453125" />
       </map>
     </option>
   </component>

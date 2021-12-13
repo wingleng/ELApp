@@ -40,4 +40,11 @@ public interface LocalService {
     @POST("user/login")
     Call<Result<String>> login(@Body LoginParam loginParam);
 
+    /**
+     * 配置插入接口
+     * @param ids
+     * @return
+     */
+    @POST
+    Call<Result<String>> insertForgetWord(@Body List<String> ids);
 }

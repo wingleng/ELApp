@@ -1,5 +1,6 @@
 package com.wong.elapp.network.mapper;
 
+import com.wong.elapp.pojo.vo.YouDaoPic2Pic.YoudaoPic2Pic;
 import com.wong.elapp.pojo.vo.Youdaoresult.YoudaoResult;
 import com.wong.elapp.pojo.vo.YoudaoresultPic2Text.YoudaoresultPic2Text;
 
@@ -28,7 +29,7 @@ public interface YoudaoService {
      */
     @POST("ocrtransapi")
     @FormUrlEncoded
-    Call<YoudaoresultPic2Text> pic2text(@FieldMap Map<String,String> params);
+    Call<YoudaoPic2Pic> pic2text(@FieldMap Map<String,String> params);
 
     /**
      * 图片翻译成图片的接口

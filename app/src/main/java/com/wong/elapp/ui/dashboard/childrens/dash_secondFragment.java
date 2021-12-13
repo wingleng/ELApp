@@ -22,6 +22,8 @@ import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.AdapterView;
+import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
@@ -39,6 +41,8 @@ import com.wong.elapp.network.mapper.BaiduService;
 import com.wong.elapp.network.mapper.YoudaoService;
 import com.wong.elapp.pojo.vo.Baidu.accesstoken.Access_Token;
 import com.wong.elapp.pojo.vo.Baidu.resultData.resultData;
+import com.wong.elapp.pojo.vo.YouDaoPic2Pic.ResRegions;
+import com.wong.elapp.pojo.vo.YouDaoPic2Pic.YoudaoPic2Pic;
 import com.wong.elapp.pojo.vo.YoudaoresultPic2Text.YoudaoresultPic2Text;
 import com.wong.elapp.ui.home.HomeViewModel;
 import com.wong.elapp.ui.notifications.NotificationsFragment;
@@ -89,6 +93,8 @@ public class dash_secondFragment extends Fragment {
     QMUIRoundButton dash2Camer;
     QMUIRoundButton dash2Blum;
     ImageView dash2Img;
+    EditText translateContent;
+
     Context context;
 
     String FROM = "auto";//翻译要转换的类型。
@@ -104,7 +110,12 @@ public class dash_secondFragment extends Fragment {
     static String Token = null;
 
     //图片查询结果：
-    YoudaoresultPic2Text youdaoResult;
+//    YoudaoresultPic2Text youdaoResult; //这个变量留着，原来是图片翻译成文字的结果，但是现在功能改成了图片翻译成图片
+    YoudaoPic2Pic youdaoPic2Pic;
+    //图片的文字返回
+    String translateStrs;
+    //服务器返回的图片翻译结果：
+    Bitmap translatedBitmap;
 
     //拍照的缓存
     File outputImage;
@@ -160,10 +171,18 @@ public class dash_secondFragment extends Fragment {
         dash2Camer = binding.dash2Camer;
         dash2Blum = binding.dash2Blum;
         dash2Img = binding.dash2Img;
+        translateContent = binding.translateContent;
 
 //        dash2Camer.setOnClickListener(new dash_secondFragment.CamerBtnListener());
+        //相机触发器
         dash2Camer.setOnClickListener(new CamerBtnListener());
+        //相册触发器
         dash2Blum.setOnClickListener(new dash_secondFragment.BlumBtnListeber());
+        //为图片添加一个长按保存的事件
+        dash2Img.setOnLongClickListener(v -> {
+
+            return false;
+        });
 
 
         return root;
@@ -189,7 +208,11 @@ public class dash_secondFragment extends Fragment {
                 //发送请求，获取图片的文字内容
                 sendPic2TextQuery(base64,FROM,TO);
 
-                //发送请求，直接返回图片
+                /**
+                 *TODO:这两个方法是调用百度的机器翻译的接口的
+                 * 但是因为未知原因，百度的接口余额居然没有了
+                 * 所以这里暂时屏蔽这两个方法
+                 */
 //                getToken();
 //                sendPic2Pic(outputImage);
 
@@ -244,26 +267,58 @@ public class dash_secondFragment extends Fragment {
         params.put("appKey",APP_KEY);
         params.put("salt",salt);
         params.put("sign",sign);
+        params.put("render","1");//要求返回图片
 
-        Call<YoudaoresultPic2Text> call = youdaoService.pic2text(params);
-        call.enqueue(new Callback<YoudaoresultPic2Text>() {
+        Call<YoudaoPic2Pic> call = youdaoService.pic2text(params);
+        call.enqueue(new Callback<YoudaoPic2Pic>() {
             @Override
-            public void onResponse(Call<YoudaoresultPic2Text> call, Response<YoudaoresultPic2Text> response) {
+            public void onResponse(Call<YoudaoPic2Pic> call, Response<YoudaoPic2Pic> response) {
                 if(response.body()==null){
                     QMUIToastHelper.show(Toast.makeText(getActivity(),"出现异常，服务器返回的数据为空",Toast.LENGTH_LONG));
                 }else {
-                    Log.i("有道请求成功","内容"+response.body().getResRegions().toString());
-                    youdaoResult = response.body();
+                    Log.i("有道请求成功","错误码："+response.body().getErrorCode());
+                    youdaoPic2Pic = response.body();
+
+                    //数据返回成功之后，当然就是更新ui了。
+                    setResult();
                 }
             }
 
             @Override
-            public void onFailure(Call<YoudaoresultPic2Text> call, Throwable t) {
+            public void onFailure(Call<YoudaoPic2Pic> call, Throwable t) {
                     Log.i(ERRCODE.REQUEST_FAILED.getMsgtype(), ERRCODE.REQUEST_FAILED.getMsg());
                     QMUIToastHelper.show(Toast.makeText(getActivity(),"请求发送失败",Toast.LENGTH_LONG));
             }
         });
     }
+
+    /**
+     * 请求发送成功之后，将图片base64，转化为bitmap。
+     */
+    public void setResult(){
+        //将图片更新为翻译之后的图片
+        if (youdaoPic2Pic.getRenderImage()!=null){
+            translatedBitmap = BitMap2Base64.stringtoBitmap(youdaoPic2Pic.getRenderImage());
+            dash2Img.setImageBitmap(translatedBitmap);
+        }
+        //将文本翻译内容设置到文本框当中
+        if(youdaoPic2Pic.getResRegions()!=null){
+            StringBuffer bf = new StringBuffer();
+            for (ResRegions item:
+                 youdaoPic2Pic.getResRegions()) {
+                bf.append(item.getContext());
+                bf.append("\n");
+                bf.append(item.getTranContent());
+                bf.append("\n");
+            }
+            translateStrs = new String(bf);
+            translateContent.setText(translateStrs);
+        }
+    }
+
+    /**
+     * 将当前服务器返回的bitmap保存
+     */
 
     /**
      * 生成md5加密字段

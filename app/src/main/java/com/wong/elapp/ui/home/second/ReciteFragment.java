@@ -21,6 +21,7 @@ import com.qmuiteam.qmui.util.QMUIToastHelper;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.wong.elapp.R;
 import com.wong.elapp.databinding.FragmentReciteBinding;
+import com.wong.elapp.network.mapper.LocalService;
 import com.wong.elapp.pojo.RandomList;
 import com.wong.elapp.ui.home.HomeViewModel;
 import com.wong.elapp.utils.DensityUtil;
@@ -40,6 +41,8 @@ public class ReciteFragment extends Fragment {
     @Inject
     DensityUtil densityUtil;
 
+    @Inject
+    LocalService localService;
 
     FragmentReciteBinding binding;
     HomeViewModel homeViewModel;
@@ -110,6 +113,8 @@ public class ReciteFragment extends Fragment {
                 forget_list.add(rlist.get(position).getId());
                 if (position == WORDSIZE-1){//到达底部，发送请求，并且弹出提示框，返回主界面。。
                     QMUIToastHelper.show(Toast.makeText(getActivity(),"到底了~"+forget_list.size(),Toast.LENGTH_LONG));
+                    //发送插入请求
+
                 }
             }
 

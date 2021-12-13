@@ -24,8 +24,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toEndOf="@+id/dash2_blum"
-        app:layout_constraintTop_toBottomOf="@+id/dash2_img"
-        app:layout_constraintVertical_bias="0.224"
+        app:layout_constraintTop_toTopOf="@+id/guideline11"
         app:qmui_backgroundColor="@color/s_app_color_blue_3"
         app:qmui_borderColor="@color/s_app_color_blue_to_red"
         app:qmui_isRadiusAdjustBounds="true"
@@ -51,8 +50,7 @@
         app:layout_constraintEnd_toStartOf="@+id/dash2_camer"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/dash2_img"
-        app:layout_constraintVertical_bias="0.224"
+        app:layout_constraintTop_toTopOf="@+id/guideline11"
         app:qmui_backgroundColor="@color/s_app_color_blue_3"
         app:qmui_borderColor="@color/s_app_color_blue_to_red"
         app:qmui_isRadiusAdjustBounds="true"
@@ -68,13 +66,30 @@
         android:orientation="horizontal"
         app:layout_constraintGuide_percent="0.8" />
 
+    <EditText
+        android:id="@+id/translate_content"
+        android:layout_width="fill_parent"
+        android:layout_height="wrap_content"
+        android:background="@android:drawable/edit_text"
+        android:enabled="true"
+        android:gravity="top"
+        android:inputType="textMultiLine"
+        android:maxLines="10"
+        android:minLines="8"
+        android:scrollbars="vertical"
+        app:layout_constraintBottom_toTopOf="@+id/guideline11"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"/>
+
     <ImageView
         android:id="@+id/dash2_img"
         android:layout_width="0dp"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toTopOf="@+id/guideline11"
+        app:layout_constraintBottom_toTopOf="@+id/translate_content"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintHorizontal_bias="0.0"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         tools:src="@tools:sample/avatars" />
