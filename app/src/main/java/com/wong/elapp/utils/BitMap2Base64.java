@@ -5,6 +5,7 @@ import android.graphics.BitmapFactory;
 import android.util.Base64;
 
 import java.io.ByteArrayOutputStream;
+import java.io.IOException;
 
 /**
  * 一个将bitMap和base64相互转换的工具类
@@ -16,12 +17,13 @@ public class BitMap2Base64 {
      * @param bitmapQuality
      * @return
      */
-    public static String bitmaptoString(Bitmap bitmap,int bitmapQuality){
+    public static String bitmaptoString(Bitmap bitmap,int bitmapQuality) throws IOException {
         String string = null;
         ByteArrayOutputStream bStream = new ByteArrayOutputStream();
-        bitmap.compress(Bitmap.CompressFormat.PNG,bitmapQuality,bStream);
+        bitmap.compress(Bitmap.CompressFormat.JPEG,bitmapQuality,bStream);
         byte[] bytes = bStream.toByteArray();
         string = Base64.encodeToString(bytes, Base64.DEFAULT );
+        bStream.close();
         return string;
     }
 

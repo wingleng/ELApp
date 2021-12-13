@@ -210,7 +210,12 @@ public class dash_secondFragment extends Fragment {
                 e.printStackTrace();
             }
 //            dash2Img.setImageBitmap(bitmap);//这步其实可以去掉，展示原始图片感觉没有必要
-            String base64 = BitMap2Base64.bitmaptoString(bitmap,100);
+            String base64 = null;
+            try {
+                base64 = BitMap2Base64.bitmaptoString(bitmap,100);
+            } catch (IOException e) {
+                e.printStackTrace();
+            }
 
             //发送请求，获取图片的文字内容
             sendPic2TextQuery(base64,FROM,TO);
@@ -238,6 +243,8 @@ public class dash_secondFragment extends Fragment {
 
 
             } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            } catch (IOException e) {
                 e.printStackTrace();
             }
         }
