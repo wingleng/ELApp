@@ -209,7 +209,7 @@ public class dash_secondFragment extends Fragment {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-            dash2Img.setImageBitmap(bitmap);//这步其实可以去掉，展示原始图片感觉没有必要
+//            dash2Img.setImageBitmap(bitmap);//这步其实可以去掉，展示原始图片感觉没有必要
             String base64 = BitMap2Base64.bitmaptoString(bitmap,100);
 
             //发送请求，获取图片的文字内容
@@ -219,10 +219,12 @@ public class dash_secondFragment extends Fragment {
 
         if (requestCode == CAMER_CAPTURE && resultCode == RESULT_OK){
             try {
-                Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(imageUri));
-                dash2Img.setImageBitmap(bitmap);//这步其实可以去掉，展示原始图片感觉没有必要
-                String base64 = BitMap2Base64.bitmaptoString(bitmap,100);
 
+                Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(imageUri));
+//                dash2Img.setImageBitmap(bitmap);//这步其实可以去掉，展示原始图片感觉没有必要
+                String base64 = BitMap2Base64.bitmaptoString(bitmap,50);
+
+                QMUIToastHelper.show(Toast.makeText(getActivity(),"请求发送中",Toast.LENGTH_LONG));
                 //发送请求，获取图片的文字内容
                 sendPic2TextQuery(base64,FROM,TO);
 
@@ -298,6 +300,7 @@ public class dash_secondFragment extends Fragment {
                     youdaoPic2Pic = response.body();
 
                     //数据返回成功之后，当然就是更新ui了。
+
                     setResult();
                 }
             }
@@ -317,7 +320,10 @@ public class dash_secondFragment extends Fragment {
         //将图片更新为翻译之后的图片
         if (youdaoPic2Pic.getRenderImage()!=null){
             translatedBitmap = BitMap2Base64.stringtoBitmap(youdaoPic2Pic.getRenderImage());
-            dash2Img.setImageBitmap(translatedBitmap);
+            getActivity().runOnUiThread(() -> {
+                dash2Img.setImageBitmap(translatedBitmap);
+            });
+
         }
         //将文本翻译内容设置到文本框当中
         if(youdaoPic2Pic.getResRegions()!=null){
@@ -330,7 +336,9 @@ public class dash_secondFragment extends Fragment {
                 bf.append("\n");
             }
             translateStrs = new String(bf);
-            translateContent.setText(translateStrs);
+            getActivity().runOnUiThread(()->{
+                translateContent.setText(translateStrs);
+            });
         }
     }
 
@@ -495,6 +503,8 @@ public class dash_secondFragment extends Fragment {
                 //Intent打开相机
                 Intent intent = new Intent("android.media.action.IMAGE_CAPTURE");
                 intent.putExtra(MediaStore.EXTRA_OUTPUT,imageUri);
+
+
 
                 startActivityForResult(intent,CAMER_CAPTURE);
             }catch (IOException e){
