@@ -33,6 +33,8 @@ import com.permissionx.guolindev.callback.ExplainReasonCallbackWithBeforeParam;
 import com.permissionx.guolindev.callback.RequestCallback;
 import com.permissionx.guolindev.request.ExplainScope;
 import com.qmuiteam.qmui.util.QMUIToastHelper;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialog;
+import com.qmuiteam.qmui.widget.dialog.QMUIDialogAction;
 import com.qmuiteam.qmui.widget.roundwidget.QMUIRoundButton;
 import com.wong.elapp.R;
 import com.wong.elapp.databinding.FragmentDashSecondBinding;
@@ -51,10 +53,15 @@ import com.wong.elapp.utils.ERRCODE;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.IOException;
+import java.io.OutputStream;
 import java.nio.charset.StandardCharsets;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
+import java.text.SimpleDateFormat;
+import java.util.Calendar;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -180,7 +187,7 @@ public class dash_secondFragment extends Fragment {
         dash2Blum.setOnClickListener(new dash_secondFragment.BlumBtnListeber());
         //为图片添加一个长按保存的事件
         dash2Img.setOnLongClickListener(v -> {
-
+            showMessagePositiveDialog();
             return false;
         });
 
@@ -195,7 +202,18 @@ public class dash_secondFragment extends Fragment {
     public void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
         if (requestCode == BLUM_SELECT && resultCode == RESULT_OK){
-            Glide.with(context).load(data.getData()).into(dash2Img);
+//            Glide.with(context).load(data.getData()).into(dash2Img);
+            Bitmap bitmap = null;
+            try {
+                bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(data.getData()));
+            } catch (FileNotFoundException e) {
+                e.printStackTrace();
+            }
+            dash2Img.setImageBitmap(bitmap);//这步其实可以去掉，展示原始图片感觉没有必要
+            String base64 = BitMap2Base64.bitmaptoString(bitmap,100);
+
+            //发送请求，获取图片的文字内容
+            sendPic2TextQuery(base64,FROM,TO);
         }
 
 
@@ -319,6 +337,39 @@ public class dash_secondFragment extends Fragment {
     /**
      * 将当前服务器返回的bitmap保存
      */
+    public void savePic() throws FileNotFoundException ,IOException{
+        Date date = new Date(System.currentTimeMillis());
+        String filename =new SimpleDateFormat("yyyyMMddHHmmss").format(date);
+        File savefile = new File(Environment.getExternalStorageDirectory(),filename+".JEPG");
+        OutputStream outStream = new FileOutputStream(savefile);//创建输入流
+        translatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);//将bitmap载入到流中
+        outStream.close();
+//      这三行可以实现相册更新
+        Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
+        Uri uri = Uri.fromFile(savefile);
+        intent.setData(uri);
+       getActivity().sendBroadcast(intent);//这个广播的目的就是更新图库，发了这个广播进入相册就可以找到你保存的图片了！*/
+
+        QMUIToastHelper.show(Toast.makeText(getActivity(),"图片已经保存",Toast.LENGTH_LONG));
+    }
+
+    /**
+     * 保存图片的弹窗提示：
+     */
+    public void showMessagePositiveDialog(){
+        new QMUIDialog.MessageDialogBuilder(context)
+                .setTitle("保存提示")
+                .setMessage("你要保存翻译图片吗？")
+                .addAction("取消", (dialog, index) -> dialog.dismiss())
+                .addAction("保存",((dialog, index) -> {
+                    try {
+                        savePic();
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }))
+                .create(R.style.QMUI_Dialog).show();
+    }
 
     /**
      * 生成md5加密字段
