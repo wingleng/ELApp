@@ -359,11 +359,16 @@ public class dash_secondFragment extends Fragment {
         OutputStream outStream = new FileOutputStream(savefile);//创建输入流
         translatedBitmap.compress(Bitmap.CompressFormat.JPEG, 60, outStream);//将bitmap载入到流中
         outStream.close();
-//      这三行可以实现相册更新
+//      这三行可以实现相册更新，但是感觉有坑。。。。
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
         Uri uri = Uri.fromFile(savefile);
         intent.setData(uri);
-       getActivity().sendBroadcast(intent);//这个广播的目的就是更新图库，发了这个广播进入相册就可以找到你保存的图片了！*/
+//       getActivity().sendBroadcast(intent);//这个广播的目的就是更新图库，发了这个广播进入相册就可以找到你保存的图片了！*/
+        context.sendBroadcast(intent);//这个广播的目的就是更新图库，发了这个广播进入相册就可以找到你保存的图片了！*/
+
+        //因为上面的保存不会更新图库，所以再来一次
+//        MediaStore.Images.Media.insertImage(context.getContentResolver(), String.valueOf(Environment.getExternalStorageDirectory()),filename+".JEPG",null);
+//        context.sendBroadcast(new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE, Uri.fromFile(savefile)));
 
         QMUIToastHelper.show(Toast.makeText(getActivity(),"图片已经保存",Toast.LENGTH_LONG));
     }

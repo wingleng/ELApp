@@ -9,6 +9,8 @@ import androidx.viewpager2.widget.CompositePageTransformer;
 import androidx.viewpager2.widget.MarginPageTransformer;
 import androidx.viewpager2.widget.ViewPager2;
 
+import android.os.Handler;
+import android.os.Looper;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -26,6 +28,8 @@ import com.wong.elapp.pojo.RandomList;
 import com.wong.elapp.ui.home.HomeViewModel;
 import com.wong.elapp.utils.DensityUtil;
 import com.wong.elapp.utils.cardtransformer.AlphaAndScalePageTransformer;
+import com.wong.elapp.utils.viewpagerutil.CommonUtils;
+import com.wong.elapp.utils.viewpagerutil.MyPagerHelper;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -100,6 +104,9 @@ public class ReciteFragment extends Fragment {
         //配置页面滑动以及监听器
         viewPager2.setUserInputEnabled(false);//禁止用户进行滑动，为了方便两个按钮。。。
 
+        //尝试配置速度
+//        CommonUtils.controlViewPagerSpeed(getContext(), viewPager2, 5000);
+//        MyPagerHelper.setCurrentItem(viewPager2,200, 200000000);
         viewPager2.registerOnPageChangeCallback(new ViewPager2.OnPageChangeCallback() {
             @Override
             public void onPageScrolled(int position, float positionOffset, int positionOffsetPixels) {
@@ -112,7 +119,9 @@ public class ReciteFragment extends Fragment {
                 Log.i("当前选择的位置：","position"+position);
                 forget_list.add(rlist.get(position).getId());
                 if (position == WORDSIZE-1){//到达底部，发送请求，并且弹出提示框，返回主界面。。
-                    QMUIToastHelper.show(Toast.makeText(getActivity(),"到底了~"+forget_list.size(),Toast.LENGTH_LONG));
+                    getActivity().runOnUiThread(()->{
+                        QMUIToastHelper.show(Toast.makeText(getActivity(),"到底了~"+forget_list.size(),Toast.LENGTH_LONG));
+                    });
                     //发送插入请求
 
                 }
@@ -125,12 +134,32 @@ public class ReciteFragment extends Fragment {
         });
 
         //设置按钮监听器,点击就模拟滑动
-        btnLeft.setOnClickListener(v -> {
-            viewPager2.beginFakeDrag();
-            viewPager2.fakeDragBy(-(DensityUtil.dip2px(getContext(),getResources().getDimension(R.dimen.fake_drag))));
-            Log.i("ReciteFragment",""+viewPager2.getCurrentItem());
-            viewPager2.endFakeDrag();
+//        btnLeft.setOnClickListener(v -> {
+//            viewPager2.beginFakeDrag();
+//            viewPager2.fakeDragBy(-(DensityUtil.dip2px(getContext(),getResources().getDimension(R.dimen.fake_drag))));
+//            Log.i("ReciteFragment",""+viewPager2.getCurrentItem());
+//            viewPager2.endFakeDrag();
+//        });
+
+        //设置按钮的监听器，真是麻了，谷歌居然将ViewPager的速度限制死，需要用这种麻烦的手段来控制翻页速度
+        btnLeft.setOnClickListener(v->{
+            new Thread(() -> {
+                viewPager2.beginFakeDrag();
+                for(int i=1;i<=40;i++){
+                    try {
+                        Thread.sleep(15);
+                    } catch (InterruptedException e) {
+                        e.printStackTrace();
+                    }
+                    new Handler(Looper.getMainLooper()).post(()->{
+                       viewPager2.fakeDragBy(- (float) (viewPager2.getWidth())/40);
+                    });
+                }
+                viewPager2.endFakeDrag();
+            }).start();
         });
+
+
 
         return binding.getRoot();
     }
