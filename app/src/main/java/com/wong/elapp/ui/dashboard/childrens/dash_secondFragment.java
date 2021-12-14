@@ -209,14 +209,14 @@ public class dash_secondFragment extends Fragment {
             } catch (FileNotFoundException e) {
                 e.printStackTrace();
             }
-//            dash2Img.setImageBitmap(bitmap);//这步其实可以去掉，展示原始图片感觉没有必要
+            dash2Img.setImageBitmap(bitmap);//这步其实可以去掉，展示原始图片感觉没有必要
             String base64 = null;
             try {
-                base64 = BitMap2Base64.bitmaptoString(bitmap,100);
+                base64 = BitMap2Base64.bitmaptoString(bitmap,50);
             } catch (IOException e) {
                 e.printStackTrace();
             }
-
+            QMUIToastHelper.show(Toast.makeText(getActivity(),"请求发送中",Toast.LENGTH_LONG));
             //发送请求，获取图片的文字内容
             sendPic2TextQuery(base64,FROM,TO);
         }
@@ -227,7 +227,7 @@ public class dash_secondFragment extends Fragment {
 
                 Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(imageUri));
 //                dash2Img.setImageBitmap(bitmap);//这步其实可以去掉，展示原始图片感觉没有必要
-                String base64 = BitMap2Base64.bitmaptoString(bitmap,50);
+                String base64 = BitMap2Base64.bitmaptoString(bitmap,60);
 
                 QMUIToastHelper.show(Toast.makeText(getActivity(),"请求发送中",Toast.LENGTH_LONG));
                 //发送请求，获取图片的文字内容
@@ -357,7 +357,7 @@ public class dash_secondFragment extends Fragment {
         String filename =new SimpleDateFormat("yyyyMMddHHmmss").format(date);
         File savefile = new File(Environment.getExternalStorageDirectory(),filename+".JEPG");
         OutputStream outStream = new FileOutputStream(savefile);//创建输入流
-        translatedBitmap.compress(Bitmap.CompressFormat.JPEG, 100, outStream);//将bitmap载入到流中
+        translatedBitmap.compress(Bitmap.CompressFormat.JPEG, 60, outStream);//将bitmap载入到流中
         outStream.close();
 //      这三行可以实现相册更新
         Intent intent = new Intent(Intent.ACTION_MEDIA_SCANNER_SCAN_FILE);
@@ -379,6 +379,7 @@ public class dash_secondFragment extends Fragment {
                 .addAction("保存",((dialog, index) -> {
                     try {
                         savePic();
+                        dialog.dismiss();
                     } catch (IOException e) {
                         e.printStackTrace();
                     }
