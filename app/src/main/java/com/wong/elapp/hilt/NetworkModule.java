@@ -71,8 +71,8 @@ public class NetworkModule {
     @Provides
     Retrofit provideRetrofit(OkHttpClient okHttpClient){
         Retrofit retrofit = new Retrofit.Builder()
-                .baseUrl("http://www.wingloong.top/")
-//                .baseUrl("http://172.31.129.43:8888/")
+//                .baseUrl("http://www.wingloong.top/")
+                .baseUrl("http://172.31.129.139:8888/")
                 .client(okHttpClient)
                 .addConverterFactory(GsonConverterFactory.create())
 //                .addConverterFactory(ScalarsConverterFactory.create())

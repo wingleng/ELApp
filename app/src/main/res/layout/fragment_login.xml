@@ -47,7 +47,9 @@
             android:layout_height="wrap_content"
             android:hint="输入密码"
             android:textColor="#333"
-            android:textSize="15sp" />
+            android:textSize="15sp"
+            android:inputType="textPassword"
+            />
 
     </com.github.florent37.materialtextfield.MaterialTextField>
 

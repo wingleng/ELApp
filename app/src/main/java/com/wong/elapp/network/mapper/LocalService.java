@@ -45,6 +45,6 @@ public interface LocalService {
      * @param ids
      * @return
      */
-    @POST
-    Call<Result<String>> insertForgetWord(@Body List<String> ids);
+    @POST("userinsert/rember")
+    Call<Result<String>> insertRember(@Body List<String> ids);
 }

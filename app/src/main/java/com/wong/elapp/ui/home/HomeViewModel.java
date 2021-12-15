@@ -52,6 +52,7 @@ public class HomeViewModel extends ViewModel {
         if (this.list_word ==null){
             this.list_word = new MutableLiveData<>();
             this.list_word.setValue(new ArrayList<>());
+//            return;
         }
         this.list_word.getValue().addAll(list_word);
         itera_randlist.setValue(this.list_word.getValue().iterator());
