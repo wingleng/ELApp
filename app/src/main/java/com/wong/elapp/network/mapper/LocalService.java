@@ -41,10 +41,13 @@ public interface LocalService {
     Call<Result<String>> login(@Body LoginParam loginParam);
 
     /**
-     * 配置插入接口
+     * 配置插入记录单词接口
      * @param ids
      * @return
      */
     @POST("userinsert/rember")
     Call<Result<String>> insertRember(@Body List<String> ids);
+
+    @POST("userinsert/forget")
+    Call<Result<String>> insertForget(@Body List<String> ids);
 }

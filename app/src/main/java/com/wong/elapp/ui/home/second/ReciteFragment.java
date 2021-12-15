@@ -123,14 +123,12 @@ public class ReciteFragment extends Fragment {
             public void onPageSelected(int position) {
                 super.onPageSelected(position);
                 Log.i("当前选择的位置：","position"+position);
-                Log.i("当前点击次数：",clickTime+"====>"+WORDSIZE);
-                forget_list.add(rlist.get(position).getId());
-                if (clickTime-1 == WORDSIZE-1){//到达底部，发送请求，并且弹出提示框，返回主界面。。
-                    getActivity().runOnUiThread(()->{
-                        QMUIToastHelper.show(Toast.makeText(getActivity(),"到底了~"+forget_list.size(),Toast.LENGTH_LONG));
-                    });
-
-                }
+                Log.i("两边的单词组：","remember"+remember_list.size()+"**forget_list"+forget_list.size());
+//                if (clickTime-1 == WORDSIZE-1){//到达底部，发送请求，并且弹出提示框，返回主界面。。
+//                    getActivity().runOnUiThread(()->{
+//                        QMUIToastHelper.show(Toast.makeText(getActivity(),"到底了~"+forget_list.size(),Toast.LENGTH_LONG));
+//                    });
+//                }
             }
 
             @Override
@@ -148,7 +146,7 @@ public class ReciteFragment extends Fragment {
             if (clickTime == WORDSIZE){
                 Log.i("最后一个了","单词");
                 showDialog();
-//                sendList();
+                sendList();
             }
             if (!viewPager2.isFakeDragging()) {
                 new Thread(() -> {
@@ -168,13 +166,15 @@ public class ReciteFragment extends Fragment {
             }
         });
 
+
         btnRight.setOnClickListener(v->{
             clickTime +=1;
             remember_list.add(rlist.get(viewPager2.getCurrentItem()).getId());//后端只需要每个单词的id。
-            Log.i("记住的单词:",""+remember_list.size());
             if (clickTime == WORDSIZE){
                 Log.i("最后一个了","单词");
+                sendList();
                 showDialog();
+
             }
             if (!viewPager2.isFakeDragging()) {
                 new Thread(() -> {
@@ -219,15 +219,36 @@ public class ReciteFragment extends Fragment {
     public void sendList(){
         Log.i("请求发送中。。。。","..");
         if (forget_list.size()!=0){
+            Call<Result<String>> call = localService.insertForget(forget_list);
+            call.enqueue(new Callback<Result<String>>() {
+                @Override
+                public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
+                    if (response.body()!=null) {
+                        if (response.body().getCode() == 200) {
+                            Log.i(ERRCODE.REQUEST_SUCCESS.getMsgtype(), response.body().getMsg());
+                        }
+                    }else {
+                        Log.i(ERRCODE.REQUEST_FAILED.getMsgtype(),ERRCODE.REQUEST_SUCCESS.getMsg());
+                    }
+                }
 
+                @Override
+                public void onFailure(Call<Result<String>> call, Throwable t) {
+                    Log.i(ERRCODE.REQUEST_FAILED.getMsgtype(), ERRCODE.REQUEST_FAILED.getMsg());
+                }
+            });
         }
         if (remember_list.size()!=0){
             Call<Result<String>> call = localService.insertRember(remember_list);
             call.enqueue(new Callback<Result<String>>() {
                 @Override
                 public void onResponse(Call<Result<String>> call, Response<Result<String>> response) {
-                        if (response.body().getCode() == 200){
-                            Log.i(ERRCODE.REQUEST_SUCCESS.getMsgtype(), ERRCODE.REQUEST_SUCCESS.getMsg());
+                        if (response.body()!=null) {
+                            if (response.body().getCode() == 200) {
+                                Log.i(ERRCODE.REQUEST_SUCCESS.getMsgtype(), response.body().getMsg());
+                            }
+                        }else {
+                            Log.i(ERRCODE.REQUEST_FAILED.getMsgtype(),ERRCODE.REQUEST_SUCCESS.getMsg());
                         }
                 }
 
