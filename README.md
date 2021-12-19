@@ -50,6 +50,18 @@
 
 
 
+****
+
+##### 顺序图：
+
+![](https://gitee.com/wongGNOW/images/raw/master/img/20211219195515.svg)
+
+****
+
+##### 协作图：
+
+![协作图](https://gitee.com/wongGNOW/images/raw/master/img/20211219195624.svg)
+
 如图所示：大概可以分为，控制controller，服务service，数据提供dao，数据实体类vo ，拦截器LoginInterceptor，工具类utils等多个功能模块。
 
 ****
