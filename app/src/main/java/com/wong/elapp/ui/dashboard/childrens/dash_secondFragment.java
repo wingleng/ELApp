@@ -227,7 +227,7 @@ public class dash_secondFragment extends Fragment {
 
                 Bitmap bitmap = BitmapFactory.decodeStream(getActivity().getContentResolver().openInputStream(imageUri));
 //                dash2Img.setImageBitmap(bitmap);//这步其实可以去掉，展示原始图片感觉没有必要
-                String base64 = BitMap2Base64.bitmaptoString(bitmap,60);
+                String base64 = BitMap2Base64.bitmaptoString(bitmap,40);
 
                 QMUIToastHelper.show(Toast.makeText(getActivity(),"请求发送中",Toast.LENGTH_LONG));
                 //发送请求，获取图片的文字内容
